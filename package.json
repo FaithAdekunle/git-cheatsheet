@@ -8,7 +8,9 @@
       "node_modules/*",
       "server/views/*",
       "build/*",
-      "coverage/*"
+      "coverage/*",
+      "server/seeds/*",
+      "server/tests/*"
     ]
   },
   "scripts": {
@@ -19,7 +21,8 @@
     "build:dev": "webpack --config webpack.dev.js && babel-node server",
     "start:server": "nodemon --exec npm run build:dev",
     "start:client": "webpack-dev-server --config webpack.dev.js",
-    "start": "npm run build && node build/server"
+    "start": "npm run build && node build/server",
+    "seed": "babel-node server/seeds"
   },
   "keywords": [],
   "author": "",
@@ -36,6 +39,8 @@
     "babel-jest": "^23.4.2",
     "babel-loader": "^8.0.4",
     "babel-preset-env": "^1.7.0",
+    "chai": "^4.2.0",
+    "chai-http": "^4.2.0",
     "enzyme": "^3.7.0",
     "enzyme-adapter-react-16": "^1.6.0",
     "enzyme-to-json": "^3.3.4",
@@ -57,6 +62,7 @@
     "dotenv": "^6.1.0",
     "ejs": "^2.6.1",
     "express": "^4.16.4",
+    "mongoose": "^5.3.11",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
     "react-redux": "^5.0.7",
