@@ -10,4 +10,4 @@ class Models {
   }
 }
 
-export default Models;
+export default new Models();
