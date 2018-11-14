@@ -15,8 +15,9 @@ class App {
     this.app.get('/', (req, res) => {
       res.sendFile('index.html', { root: `${__dirname}/views` });
     });
-    const app = this.app.listen(3000);
-    console.log('app running on port ', 3000);
+    const port = process.env.PORT || 3000;
+    const app = this.app.listen(port);
+    console.log(`***********************app running on port ${port}***************************`);
     return app;
   }
 }

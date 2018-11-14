@@ -1,6 +1,11 @@
 import app from './app';
 import { connect } from './db';
 
-connect();
+const setup = () => new Promise(async (resolve) => {
+  await connect();
+  resolve(app.setup());
+});
 
-export default app.setup();
+setup();
+
+export default setup;

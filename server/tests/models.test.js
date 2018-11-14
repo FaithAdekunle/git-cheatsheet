@@ -3,45 +3,36 @@ import { connect, dropDatabase, disconnect } from '../db';
 describe('models', () => {
   let models;
   let categoryId;
-  beforeAll(done => connect().then((schema) => {
-    models = schema;
-    done();
-  }));
+  beforeAll(async () => {
+    models = await connect();
+  });
 
-  afterAll(done => dropDatabase().then(() => {
+
+  afterAll(async () => {
+    models = await dropDatabase();
     disconnect();
-    done();
-  }));
+  });
 
-  test('should create a category successfully', (done) => {
+  test('should create a category successfully', async () => {
     const [title, description] = ['test title', 'test description'];
-    models.Category.create({ title, description })
-      .then((category) => {
-        categoryId = category._id;
-        expect(category.title).toBe(title);
-        expect(category.description).toBe(description);
-        done();
-      });
+    const category = await models.Category.create({ title, description });
+    categoryId = category._id;
+    expect(category.title).toBe(title);
+    expect(category.description).toBe(description);
   });
 
-  test('should create a command successfully', (done) => {
+  test('should create a command successfully', async () => {
     const [script, description] = ['test script', 'test description'];
-    models.Command.create({ script, description, category: categoryId })
-      .then((command) => {
-        expect(command.script).toBe(script);
-        expect(command.description).toBe(description);
-        expect(command.category).toBe(categoryId);
-        done();
-      });
+    const command = await models.Command.create({ script, description, category: categoryId });
+    expect(command.script).toBe(script);
+    expect(command.description).toBe(description);
+    expect(command.category).toBe(categoryId);
   });
 
-  test('should create an admin successfully', (done) => {
+  test('should create an admin successfully', async () => {
     const [email, password] = ['test@test.com', 'test password'];
-    models.Admin.create({ email, password })
-      .then((admin) => {
-        expect(admin.email).toBe(email);
-        expect(admin.password).toBe(password);
-        done();
-      });
+    const admin = await models.Admin.create({ email, password });
+    expect(admin.email).toBe(email);
+    expect(admin.password).toBe(password);
   });
 });
