@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import models from './models';
+import Models from './models';
+import app from './app';
 
 dotenv.config();
 
@@ -17,13 +18,18 @@ const db = () => {
 
 export const connect = () => new Promise(async (resolve) => {
   await mongoose.connect(db());
-  models.models(mongoose);
+  const models = Models.models(mongoose);
   resolve(models);
 });
 
-export const disconnect = () => mongoose.disconnect();
+export const disconnect = () => new Promise(resolve => mongoose.disconnect().then(() => resolve()));
 
 export const dropDatabase = () => new Promise(async (resolve) => {
   await mongoose.connection.db.dropDatabase();
   resolve();
+});
+
+export const setup = () => new Promise(async (resolve) => {
+  const models = await connect();
+  resolve({ app: app.setup(models), models });
 });

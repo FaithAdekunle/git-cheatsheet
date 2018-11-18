@@ -5,7 +5,7 @@ class CommandSchema {
       script: { type: String, required: true },
       description: { type: String, required: true },
       keywords: [{ type: String }],
-      category: { type: Schema.Types.ObjectId, ref: 'Category', required: true },
+      categoryId: { type: Schema.Types.ObjectId, ref: 'Category', required: true },
     });
     return mongoose.model('Command', schema);
   }

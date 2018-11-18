@@ -1,11 +1,3 @@
-import app from './app';
-import { connect } from './db';
-
-const setup = () => new Promise(async (resolve) => {
-  await connect();
-  resolve(app.setup());
-});
+import { setup } from './db';
 
 setup();
-
-export default setup;
