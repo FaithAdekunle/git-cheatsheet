@@ -9,8 +9,8 @@ describe('models', () => {
 
 
   afterAll(async () => {
-    models = await dropDatabase();
-    disconnect();
+    await dropDatabase();
+    await disconnect();
   });
 
   test('should create a category successfully', async () => {
@@ -23,10 +23,10 @@ describe('models', () => {
 
   test('should create a command successfully', async () => {
     const [script, description] = ['test script', 'test description'];
-    const command = await models.Command.create({ script, description, category: categoryId });
+    const command = await models.Command.create({ script, description, categoryId });
     expect(command.script).toBe(script);
     expect(command.description).toBe(description);
-    expect(command.category).toBe(categoryId);
+    expect(command.categoryId).toBe(categoryId);
   });
 
   test('should create an admin successfully', async () => {

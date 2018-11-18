@@ -3,11 +3,13 @@ import CommandSchema from './commandSchema';
 import AdminSchema from './adminSchema';
 
 class Models {
-  models(mongoose) {
-    this.Category = CategorySchema.register(mongoose);
-    this.Command = CommandSchema.register(mongoose);
-    this.Admin = AdminSchema.register(mongoose);
+  static models(mongoose) {
+    return {
+      Category: CategorySchema.register(mongoose),
+      Command: CommandSchema.register(mongoose),
+      Admin: AdminSchema.register(mongoose),
+    };
   }
 }
 
-export default new Models();
+export default Models;
