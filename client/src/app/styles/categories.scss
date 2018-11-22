@@ -1,0 +1,50 @@
+.categories-component {
+  padding: 1em;
+  button {
+    cursor: pointer;
+  }
+
+  .category-components {
+
+    .category-component {
+      margin-top: 1.5em;
+      .category-header {
+        background-color: #31363F;
+        padding: 0.2em 0.5em;
+        font-size: 1em;
+        cursor: pointer;
+      }
+      .category-body {
+        .command-list {
+          max-height: 0;
+          overflow: hidden;
+          transition-property: max-height;
+          transition-duration: 0.7s;
+          transition-delay: 0s;
+          list-style-type: none;
+          padding: 0;
+          .command-list-item {
+            background-color: #ffffe9;
+            color: #252a2e;
+            padding: 0.5em;
+            margin-top: 0.5em;
+            margin-bottom: 0.5em;
+            .command-content {
+              .command-description {
+                font-size: 0.85em;
+              }
+              .command-script {
+                font-size: 0.7em;
+                cursor: pointer;
+              }
+            }
+          }
+        }
+        .expand {
+          max-height: 50em;
+          overflow-y: scroll;
+        }
+      }
+    }
+  }
+}

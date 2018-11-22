@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css?family=Josefin+Sans|Mukta|Muli|Open+Sans+Condensed:300|PT+Sans+Narrow|Playfair+Display|Titillium+Web');
+body {
+  font-family: 'PT Sans Narrow', sans-serif;
+  background-color: #252a2e;
+  color: white;
+  button, input {
+    &:focus {
+      outline: none !important;
+      box-shadow: none !important;
+    }
+  }
+
+  @import "common";
+  @import "categories";
+}

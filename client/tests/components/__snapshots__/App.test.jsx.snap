@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<App /> should match snapshot when there are ajaxCallsInProgress 1`] = `
+<Fragment>
+  <Loader />
+  <Connect(Categories) />
+</Fragment>
+`;
+
+exports[`<App /> should match snapshot when there are no ajaxCallsInProgress 1`] = `
+<Fragment>
+  <Connect(Categories) />
+</Fragment>
+`;

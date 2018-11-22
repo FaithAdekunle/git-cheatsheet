@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Loader /> should match snapshot 1`] = `
+<div
+  className="common"
+>
+  <ModalOverlay />
+  <div
+    className="absolute loader-modal"
+  >
+    <div
+      className="spinner"
+    >
+      <FontAwesomeIcon
+        border={false}
+        className="fa-spin"
+        fixedWidth={false}
+        flip={null}
+        icon="spinner"
+        inverse={false}
+        listItem={false}
+        mask={null}
+        pull={null}
+        pulse={false}
+        rotation={null}
+        size={null}
+        spin={false}
+        symbol={false}
+        title=""
+        transform={null}
+      />
+    </div>
+  </div>
+</div>
+`;
