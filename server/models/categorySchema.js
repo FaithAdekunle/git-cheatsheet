@@ -3,8 +3,9 @@ class CategorySchema {
     const { Schema } = mongoose;
     const schema = new Schema({
       title: { type: String, required: true },
-      description: String,
       commands: [{ type: Schema.Types.ObjectId, ref: 'Command', default: [] }],
+      userId: { type: String, required: true },
+      privacyStatus: { type: Boolean, default: false },
     });
     return mongoose.model('Category', schema);
   }

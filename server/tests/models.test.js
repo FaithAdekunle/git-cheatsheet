@@ -1,4 +1,7 @@
+import mongoose from 'mongoose';
 import { connect, dropDatabase, disconnect } from '../db';
+
+const userId = mongoose.Types.ObjectId();
 
 describe('models', () => {
   let models;
@@ -14,25 +17,29 @@ describe('models', () => {
   });
 
   test('should create a category successfully', async () => {
-    const [title, description] = ['test title', 'test description'];
-    const category = await models.Category.create({ title, description });
+    const title = 'test title';
+    const category = await models.Category.create({ title, userId });
     categoryId = category._id;
     expect(category.title).toBe(title);
-    expect(category.description).toBe(description);
   });
 
   test('should create a command successfully', async () => {
     const [script, description] = ['test script', 'test description'];
-    const command = await models.Command.create({ script, description, categoryId });
+    const command = await models.Command.create({
+      script,
+      description,
+      categoryId,
+      userId,
+    });
     expect(command.script).toBe(script);
     expect(command.description).toBe(description);
     expect(command.categoryId).toBe(categoryId);
   });
 
-  test('should create an admin successfully', async () => {
+  test('should create a user successfully', async () => {
     const [email, password] = ['test@test.com', 'test password'];
-    const admin = await models.Admin.create({ email, password });
-    expect(admin.email).toBe(email);
-    expect(admin.password).toBe(password);
+    const user = await models.User.create({ email, password });
+    expect(user.email).toBe(email);
+    expect(user.password).toBe(password);
   });
 });

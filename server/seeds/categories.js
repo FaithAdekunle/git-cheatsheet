@@ -1,7 +1,6 @@
 const categories = [
   {
     title: 'Install GIT',
-    description: '',
     commands: [
       { script: 'brew install git', description: 'Install git on macOS with Homebrew', keywords: ['install', 'macos', 'homebrew'] },
       { script: 'sudo apt-get install git', description: 'Install git on Debian-based linux', keywords: ['install', 'apt-get', 'debian', 'linux'] },
@@ -10,7 +9,6 @@ const categories = [
   },
   {
     title: 'Configuration',
-    description: '',
     commands: [
       { script: 'git config --global user.name [name]', description: 'Sets the name you want attached to your commit transaction', keywords: ['configuration', 'name', 'email', 'user'] },
       { script: 'git config --global user.email [email address]', description: 'Sets the email you want attached to your commit transactions', keywords: ['configuration', 'name', 'email', 'user'] },
@@ -19,7 +17,6 @@ const categories = [
   },
   {
     title: 'Create Repositories',
-    description: '',
     commands: [
       { script: 'git init [project-name]', description: 'Creates a new local repository with the specified name', keywords: ['new', 'project', 'create'] },
       { script: 'git clone [url]', description: 'Downloads a project and its entire version history', keywords: ['download', 'remote', 'clone', 'checkout'] },
@@ -27,7 +24,6 @@ const categories = [
   },
   {
     title: 'Make Changes',
-    description: '',
     commands: [
       { script: 'git status', description: 'Lists all new or modified files to be commited', keywords: ['change', 'modifications', 'commit'] },
       { script: 'git diff', description: 'Shows file differences not yet staged', keywords: ['modifications', 'changes', 'diff'] },
@@ -39,7 +35,6 @@ const categories = [
   },
   {
     title: 'Branches',
-    description: '',
     commands: [
       { script: 'git branch', description: 'Lists all local branches in the current repository', keywords: [] },
       { script: 'git branch [branch-name]', description: 'Creates a branch', keywords: [] },
@@ -52,7 +47,6 @@ const categories = [
   },
   {
     title: 'Moving and removing files',
-    description: '',
     commands: [
       { script: 'git rm [file]', description: 'Deletes the file from the working directory and stages the deletion', keywords: [] },
       { script: 'git rm --cached [file]', description: 'Removes the file from version control but preserves the file locally', keywords: [] },
@@ -61,7 +55,6 @@ const categories = [
   },
   {
     title: 'Stashing',
-    description: '',
     commands: [
       { script: 'git stash', description: 'Temporarily stores all modified tracked files', keywords: [] },
       { script: 'git stash pop', description: 'Restores the most last stashed files and deletes the stashed changeset', keywords: [] },
@@ -71,7 +64,6 @@ const categories = [
   },
   {
     title: 'History and diff',
-    description: '',
     commands: [
       { script: 'git log', description: 'Lists version history for the current branch', keywords: [] },
       { script: 'git log --follow [file]', description: 'Lists version history for a file, including renames', keywords: [] },
@@ -81,7 +73,6 @@ const categories = [
   },
   {
     title: 'Cancel and redo stuffs',
-    description: '',
     commands: [
       { script: 'git reset [commit]', description: 'Undoes all commits afer [commit], preserving changes locally', keywords: [] },
       { script: 'git reset --hard [commit]', description: 'Discards all history and changes back to the specified commit', keywords: [] },
@@ -91,7 +82,6 @@ const categories = [
   },
   {
     title: 'Synchronization and remote repositories',
-    description: '',
     commands: [
       { script: 'git push [alias] [branch]', description: 'Pushes all local changesets to the remote repository', keywords: [] },
       { script: 'git pull', description: 'Downloads new remote history and incorporate changes', keywords: [] },
@@ -102,7 +92,6 @@ const categories = [
   },
   {
     title: 'Tagging',
-    description: '',
     commands: [
       { script: 'git tag', description: 'Lists tags', keywords: ['tag', 'version', 'release'] },
       { script: 'git tag -l "[pattern]"', description: 'Lists tags with specified pattern', keywords: ['tag', 'version', 'release', 'pattern'] },

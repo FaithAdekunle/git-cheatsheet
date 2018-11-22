@@ -16,20 +16,18 @@ const db = () => {
   }
 };
 
-export const connect = () => new Promise(async (resolve) => {
+export const connect = async () => {
   await mongoose.connect(db());
-  const models = Models.models(mongoose);
-  resolve(models);
-});
+  return Models.models(mongoose);
+};
 
 export const disconnect = () => new Promise(resolve => mongoose.disconnect().then(() => resolve()));
 
-export const dropDatabase = () => new Promise(async (resolve) => {
+export const dropDatabase = async () => {
   await mongoose.connection.db.dropDatabase();
-  resolve();
-});
+};
 
-export const setup = () => new Promise(async (resolve) => {
+export const setup = async () => {
   const models = await connect();
-  resolve({ app: app.setup(models), models });
-});
+  return { app: app.setup(models), models };
+};

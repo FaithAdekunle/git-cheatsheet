@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Command /> should match snapshot 1`] = `
+<Fragment>
+  <div
+    className="command-content"
+  >
+    <div
+      className="command-description"
+    >
+      Install git on macOS with Homebrew
+    </div>
+    <code
+      className="command-script"
+    >
+      brew install git
+    </code>
+  </div>
+</Fragment>
+`;

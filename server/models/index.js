@@ -1,13 +1,13 @@
 import CategorySchema from './categorySchema';
 import CommandSchema from './commandSchema';
-import AdminSchema from './adminSchema';
+import UserSchema from './userSchema';
 
 class Models {
   static models(mongoose) {
     return {
       Category: CategorySchema.register(mongoose),
       Command: CommandSchema.register(mongoose),
-      Admin: AdminSchema.register(mongoose),
+      User: UserSchema.register(mongoose),
     };
   }
 }
