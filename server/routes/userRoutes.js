@@ -7,7 +7,7 @@ class UserRoutes {
   static routes(models) {
     const userControllers = UserController.controllers(models);
 
-    router.get('/login', userControllers.login);
+    router.post('/login', userControllers.login);
     router.post('/register', userControllers.register);
     return router;
   }

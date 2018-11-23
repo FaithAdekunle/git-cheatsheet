@@ -1,0 +1,47 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Sidebar /> should match snapshot with userToken 1`] = `
+<Fragment>
+  <h6
+    className="expand-sidebar"
+    onClick={[Function]}
+  >
+    &gt;&gt;&gt;
+  </h6>
+  <div
+    className="sidebar"
+  >
+    <h6
+      className="text-center"
+    >
+      © Faith Adekunle
+    </h6>
+  </div>
+</Fragment>
+`;
+
+exports[`<Sidebar /> should match snapshot without userToken 1`] = `
+<Fragment>
+  <h6
+    className="expand-sidebar"
+    onClick={[Function]}
+  >
+    &gt;&gt;&gt;
+  </h6>
+  <div
+    className="sidebar"
+  >
+    <div
+      className="login-or-register"
+    >
+      <Connect(LoginOrRegister) />
+      <hr />
+    </div>
+    <h6
+      className="text-center"
+    >
+      © Faith Adekunle
+    </h6>
+  </div>
+</Fragment>
+`;

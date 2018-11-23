@@ -11,7 +11,6 @@ export class Categories extends React.Component {
     this.state = {
       expandAll: false,
       keyword: '',
-      categories: [],
     };
     this.toggleCategoriesExpansion = this.toggleCategoriesExpansion.bind(this);
     this.onKeywordChange = this.onKeywordChange.bind(this);

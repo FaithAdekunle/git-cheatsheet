@@ -1,6 +1,7 @@
 module.exports = {
-  isAuthenticated: false,
+  userToken: '',
   categories: [],
   notifications: [],
   ajaxCallsInProgress: 0,
+  sidebar: false,
 };

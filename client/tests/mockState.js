@@ -3,6 +3,8 @@ const mockState = {
   categories: [],
   notifications: [],
   ajaxCallsInProgress: 0,
+  expandSidebar: false,
+  userToken: '',
 };
 
 export default mockState;

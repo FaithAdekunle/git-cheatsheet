@@ -10,6 +10,11 @@ body {
     }
   }
 
+  .main {
+    min-height: 100vh;
+    @import "categories";
+  }
+
   @import "common";
-  @import "categories";
+  @import "sidebar";
 }
