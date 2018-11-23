@@ -1,0 +1,34 @@
+.active {
+  text-decoration: underline;
+}
+.authenticate {
+  cursor: pointer
+}
+.card {
+  margin-top: 1em;
+  background-color: inherit;
+  color: inherit;
+  .error-response {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    color: #f66;
+    font-size: 0.8rem;
+    padding: 0.3em;
+    margin-bottom: 0.6em;
+  }
+  form {
+    input {
+      border-radius: unset;
+    }
+    label {
+      margin-bottom: 0.3rem;
+    }
+    input[type="submit"] {
+      cursor: pointer;
+    }
+    .error {
+      display: block;
+      color: #f66;
+      font-size: 0.7rem;
+    }
+  }
+}

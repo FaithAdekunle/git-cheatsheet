@@ -5,7 +5,7 @@ import ModalOverlay from './modalOverlay';
 const Loader = () => (
   <div className="common">
     <ModalOverlay />
-    <div className="absolute loader-modal">
+    <div className="fixed loader-modal">
       <div className="spinner">
         <FontAwesomeIcon icon="spinner" className="fa-spin" />
       </div>

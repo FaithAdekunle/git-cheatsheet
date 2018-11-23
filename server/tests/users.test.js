@@ -23,14 +23,14 @@ describe('categories', () => {
   });
 
   test('login user with correct credentials', async () => {
-    const { body } = await chai.request(host).get('/api/users/login').send(userCredentials);
+    const { body } = await chai.request(host).post('/api/users/login').send(userCredentials);
     expect(body.success).toBe(true);
   });
 
   test('login user with wrong password', async () => {
     const { body } = await chai
       .request(host)
-      .get('/api/users/login')
+      .post('/api/users/login')
       .send({ ...userCredentials, password: 'wrongtestpassword' });
     expect(body.success).toBe(false);
     expect(body.error).toBe('wrong email or password');
@@ -39,7 +39,7 @@ describe('categories', () => {
   test('login user with wrong email', async () => {
     const { body } = await chai
       .request(host)
-      .get('/api/users/login')
+      .post('/api/users/login')
       .send({ ...userCredentials, email: 'email@wrongemail.com' });
     expect(body.success).toBe(false);
     expect(body.error).toBe('wrong email or password');

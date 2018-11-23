@@ -3,12 +3,24 @@
 exports[`<App /> should match snapshot when there are ajaxCallsInProgress 1`] = `
 <Fragment>
   <Loader />
-  <Connect(Categories) />
+  <Connect(Sidebar) />
+  <div
+    className="main"
+    onClick={[Function]}
+  >
+    <Connect(Categories) />
+  </div>
 </Fragment>
 `;
 
 exports[`<App /> should match snapshot when there are no ajaxCallsInProgress 1`] = `
 <Fragment>
-  <Connect(Categories) />
+  <Connect(Sidebar) />
+  <div
+    className="main"
+    onClick={[Function]}
+  >
+    <Connect(Categories) />
+  </div>
 </Fragment>
 `;

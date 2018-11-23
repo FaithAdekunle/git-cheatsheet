@@ -1,0 +1,29 @@
+.sidebar {
+  padding: 1em;
+  position: fixed;
+  min-height: 100vh;
+  min-width: 20%;
+  z-index: 1;
+  background-color: #21252b;
+  color: white;
+  box-shadow: rgba(0, 0, 0, 0.15) -2px 2px 4px;
+  transition: -webkit-transform 0.3s ease-out 0s;
+  will-change: transform;
+  transform: translateX(-100%);
+  display: flex !important;
+  height: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+  .login-or-register {
+    @import 'loginOrRegister';
+  }
+}
+.expand-sidebar {
+  position: absolute;
+  top: 3%;
+  left: 1%;
+  cursor: pointer;
+}
+.sidebar-expand {
+  transform: translateX(0%);
+}

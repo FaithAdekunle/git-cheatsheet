@@ -6,7 +6,7 @@ exports[`<Loader /> should match snapshot 1`] = `
 >
   <ModalOverlay />
   <div
-    className="absolute loader-modal"
+    className="fixed loader-modal"
   >
     <div
       className="spinner"

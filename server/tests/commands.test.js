@@ -24,7 +24,7 @@ describe('commands', () => {
     Category = models.Category;
     const userLogin = await chai.request(host).post('/api/users/register').send(userCredentials);
     user2Token = userLogin.body.token;
-    const adminLogin = await chai.request(host).get('/api/users/login').send(adminCredentials);
+    const adminLogin = await chai.request(host).post('/api/users/login').send(adminCredentials);
     user1Token = adminLogin.body.token;
   });
 
