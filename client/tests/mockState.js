@@ -4,7 +4,7 @@ const mockState = {
   notifications: [],
   ajaxCallsInProgress: 0,
   expandSidebar: false,
-  userToken: '',
+  user: { token: '', id: '' },
 };
 
 export default mockState;

@@ -7,8 +7,8 @@ import UserActions from '../../src/app/actions/userActions';
 const mockStore = configureStore([thunk]);
 const store = mockStore();
 
-const token = 'token';
-const successResponse = { success: true, token };
+const user = { token: 'token', id: 'id' };
+const successResponse = { success: true, ...user };
 const failureResponse = { success: false, error: 'wrong email or password' };
 const credentials = { email: 'test@test.com', password: 'password' };
 
@@ -32,7 +32,8 @@ describe('userActions', () => {
     });
     const expectedActions = [
       { type: beginAjaxCall },
-      { type: authenticateSuccess, token },
+      { type: beginAjaxCall },
+      { type: authenticateSuccess, user },
     ];
     await store.dispatch(UserActions.login(credentials));
     expect(store.getActions()).toEqual(expectedActions);
@@ -67,7 +68,8 @@ describe('userActions', () => {
     });
     const expectedActions = [
       { type: beginAjaxCall },
-      { type: authenticateSuccess, token },
+      { type: beginAjaxCall },
+      { type: authenticateSuccess, user },
     ];
     await store.dispatch(UserActions.register(credentials));
     expect(store.getActions()).toEqual(expectedActions);

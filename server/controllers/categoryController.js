@@ -20,7 +20,7 @@ class CategoryController {
           const user = await User.findOne({ email });
           if (user) {
             const categories = await Category
-              .find({ $or: [{ privacyStatus: false, userId: user._id }] }).populate({
+              .find({ $or: [{ privacyStatus: false }, { userId: user._id }] }).populate({
                 path: 'commands',
                 match: { $or: [{ privacyStatus: false }, { userId: user._id }] },
               });

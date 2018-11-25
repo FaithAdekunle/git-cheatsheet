@@ -9,7 +9,7 @@ class UserController {
       const hash = await bcrypt.hash(password, 10);
       const user = await User.create({ email, password: hash });
       const token = jwt.sign({ email: user.email, id: user._id }, process.env.JWT_KEY);
-      return res.json({ success: true, token });
+      return res.json({ success: true, token, id: user._id });
     };
   }
 
@@ -22,7 +22,7 @@ class UserController {
         const authenticated = await bcrypt.compare(password, user.password);
         if (authenticated) {
           const token = jwt.sign({ email: user.email, id: user._id }, process.env.JWT_KEY);
-          return res.json({ success: true, token });
+          return res.json({ success: true, token, id: user._id });
         }
         return res.status(400).json({ success: false, error: 'wrong email or password' });
       }

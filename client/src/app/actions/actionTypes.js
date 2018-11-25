@@ -6,4 +6,5 @@ module.exports = {
   loginSuccess: 'LOGIN_SUCCESS',
   authenticateSuccess: 'AUTHENTICATE_SUCCESS',
   mockSuccess: 'MOCK_SUCCESS',
+  toggleCategoryPrivacySuccess: 'TOGGLE_CATEGORY_PRIVACY_SUCCESS',
 };

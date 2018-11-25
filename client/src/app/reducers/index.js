@@ -8,7 +8,7 @@ const rootReducer = combineReducers({
   categories: categoriesReducer,
   ajaxCallsInProgress: ajaxCallsInProgressReducer,
   expandSidebar: sidebarReducer,
-  userToken: usersReducer,
+  user: usersReducer,
 });
 
 export default rootReducer;

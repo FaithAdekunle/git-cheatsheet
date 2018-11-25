@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 class AjaxHelpers {
-  static async fetchCategories() {
-    const response = await axios.get('/api/categories');
+  static async fetchCategories(token) {
+    const response = await axios.get(`/api/categories?token=${token}`);
     return response.data;
   }
 
@@ -22,6 +22,10 @@ class AjaxHelpers {
     } catch (error) {
       return error.response.data;
     }
+  }
+
+  static async toggleCategoryPrivacy(id, token) {
+    await axios.put(`/api/categories/${id}/toggle?token=${token}`);
   }
 }
 
