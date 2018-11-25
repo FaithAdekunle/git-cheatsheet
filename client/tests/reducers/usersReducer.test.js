@@ -4,12 +4,12 @@ import { authenticateSuccess } from '../../src/app/actions/actionTypes';
 
 describe('userReducer', () => {
   test('should return initial token value', () => {
-    expect(usersReducer(undefined, {})).toBe(initialState.userToken);
+    expect(usersReducer(undefined, {})).toEqual(initialState.user);
   });
 
   test('should return received token value', () => {
-    const token = 'token';
-    const action = { type: authenticateSuccess, token };
-    expect(usersReducer('', action)).toBe(token);
+    const user = { token: 'token', id: 'id' };
+    const action = { type: authenticateSuccess, user };
+    expect(usersReducer('', action)).toEqual(user);
   });
 });

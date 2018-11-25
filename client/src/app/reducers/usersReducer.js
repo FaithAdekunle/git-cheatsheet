@@ -1,8 +1,8 @@
-import { userToken } from './initialState';
+import { user } from './initialState';
 import { authenticateSuccess } from '../actions/actionTypes';
 
-const usersReducer = (state = userToken, action) => {
-  if (action.type === authenticateSuccess) return action.token;
+const usersReducer = (state = user, action) => {
+  if (action.type === authenticateSuccess) return action.user;
   return state;
 };
 

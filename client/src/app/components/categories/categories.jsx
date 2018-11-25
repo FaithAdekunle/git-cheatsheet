@@ -66,6 +66,7 @@ export class Categories extends React.Component {
   render() {
     const categories = this.filterCategoriesByKeyword();
     const { expandAll, keyword } = this.state;
+    const { user } = this.props;
     const [col1, col2] = this.computeGrid();
     return (
       <div className="categories-component">
@@ -117,6 +118,7 @@ export class Categories extends React.Component {
                             category={category}
                             expandAll={expandAll}
                             keyword={keyword}
+                            user={user}
                           />
                         </div>
                       ))
@@ -131,6 +133,7 @@ export class Categories extends React.Component {
                             category={category}
                             expandAll={expandAll}
                             keyword={keyword}
+                            user={user}
                           />
                         </div>
                       ))
@@ -145,6 +148,7 @@ export class Categories extends React.Component {
                             category={category}
                             expandAll={expandAll}
                             keyword={keyword}
+                            user={user}
                           />
                         </div>
                       ))
@@ -162,10 +166,12 @@ export class Categories extends React.Component {
 Categories.propTypes = {
   fetchCategories: PropTypes.func.isRequired,
   categories: PropTypes.arrayOf(PropTypes.any).isRequired,
+  user: PropTypes.objectOf(PropTypes.string).isRequired,
 };
 
 export const mapStateToProps = state => ({
   categories: state.categories,
+  user: state.user,
 });
 
 export const mapDispatchToProps = dispatch => ({

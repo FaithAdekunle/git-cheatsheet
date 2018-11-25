@@ -1,5 +1,5 @@
 module.exports = {
-  userToken: '',
+  user: { token: '', id: '' },
   categories: [],
   notifications: [],
   ajaxCallsInProgress: 0,

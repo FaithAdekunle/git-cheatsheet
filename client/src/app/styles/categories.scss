@@ -14,17 +14,33 @@
         cursor: pointer;
       }
       .category-body {
+        max-height: 0;
+        overflow: hidden;
+        transition-property: max-height;
+        transition-duration: 0.7s;
+        transition-delay: 0s;
+        color: #252a2e;
+        .category-actions {
+          display: flex;
+          justify-content: space-between;
+          padding: 0 0.3em;
+          background-color: white;
+          text-align: right;
+          .fa-pen, .fa-trash, .privacy {
+            margin: auto 0;
+            cursor: pointer;
+            font-size: 0.7em;
+            display: inline-block;
+          }
+          .fa-pen {
+            margin-right: 0.7em;
+          }
+        }
         .command-list {
-          max-height: 0;
-          overflow: hidden;
-          transition-property: max-height;
-          transition-duration: 0.7s;
-          transition-delay: 0s;
           list-style-type: none;
           padding: 0;
           .command-list-item {
             background-color: #ffffe9;
-            color: #252a2e;
             padding: 0.5em;
             margin-top: 0.5em;
             margin-bottom: 0.5em;
@@ -39,10 +55,10 @@
             }
           }
         }
-        .expand {
-          max-height: 50em;
-          overflow-y: scroll;
-        }
+      }
+      .expand {
+        max-height: 50em;
+        overflow-y: scroll;
       }
     }
   }

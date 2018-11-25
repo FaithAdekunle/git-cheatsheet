@@ -8,7 +8,7 @@ let wrapper;
 
 const sidebarProps = {
   expand: false,
-  userToken: '',
+  user: { token: '', id: '' },
   expandSidebar: jest.fn(),
 };
 
@@ -28,12 +28,12 @@ describe('<Sidebar />', () => {
     expect(wrapper.find('.sidebar-expand').length).toBe(1);
   });
 
-  test('should match snapshot without userToken', () => {
+  test('should match snapshot without user details', () => {
     expect(toJson(wrapper)).toMatchSnapshot();
   });
 
-  test('should match snapshot with userToken', () => {
-    const props = { ...sidebarProps, userToken: 'token' };
+  test('should match snapshot with user details', () => {
+    const props = { ...sidebarProps, user: { token: 'token', id: 'id' } };
     wrapper = shallow(<Sidebar {...props} />);
     expect(toJson(wrapper)).toMatchSnapshot();
   });
@@ -45,7 +45,7 @@ describe('<Sidebar />', () => {
   });
 
   test('should return required state properties', () => {
-    const expectedReturn = { expand: mockState.expandSidebar, userToken: mockState.userToken };
+    const expectedReturn = { expand: mockState.expandSidebar, user: mockState.user };
     expect(mapStateToProps(mockState)).toEqual(expectedReturn);
   });
 

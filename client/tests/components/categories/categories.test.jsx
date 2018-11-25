@@ -7,6 +7,7 @@ import mockState from '../../mockState';
 const categoriesProps = {
   categories,
   fetchCategories: jest.fn(),
+  user: { token: '', id: '' },
 };
 
 const mockEvent = value => ({
@@ -82,7 +83,7 @@ describe('<Categories />', () => {
   });
 
   test('should return required state properties', () => {
-    const expectedReturn = { categories: mockState.categories };
+    const expectedReturn = { categories: mockState.categories, user: mockState.user };
     expect(mapStateToProps(mockState)).toEqual(expectedReturn);
   });
 

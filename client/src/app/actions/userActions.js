@@ -1,19 +1,23 @@
 import { authenticateSuccess, mockSuccess } from './actionTypes';
 import AjaxCallsInProgressAction from './ajaxCallsInProgressAction';
 import AjaxHelpers from '../helpers/ajaxHelpers';
+import CategoriesActions from './categoriesActions';
 
 class UserActions {
-  static authenticateSuccess(token) {
-    return { type: authenticateSuccess, token };
+  static authenticateSuccess(user) {
+    return { type: authenticateSuccess, user };
   }
 
   static login(credentials) {
     return async (dispatch) => {
       dispatch(AjaxCallsInProgressAction.beginAjaxCalls());
-      const login = await AjaxHelpers.login(credentials);
-      if (login.success) return dispatch(UserActions.authenticateSuccess(login.token));
+      const user = await AjaxHelpers.login(credentials);
+      if (user.success) {
+        dispatch(CategoriesActions.fetchCategories(user.token));
+        return dispatch(UserActions.authenticateSuccess({ token: user.token, id: user.id }));
+      }
       dispatch({ type: mockSuccess });
-      throw new Error(login.error);
+      throw new Error(user.error);
     };
   }
 
@@ -21,7 +25,10 @@ class UserActions {
     return async (dispatch) => {
       dispatch(AjaxCallsInProgressAction.beginAjaxCalls());
       const user = await AjaxHelpers.register(credentials);
-      if (user.success) return dispatch(UserActions.authenticateSuccess(user.token));
+      if (user.success) {
+        dispatch(CategoriesActions.fetchCategories(user.token));
+        return dispatch(UserActions.authenticateSuccess({ token: user.token, id: user.id }));
+      }
       dispatch({ type: mockSuccess });
       throw new Error(user.error);
     };

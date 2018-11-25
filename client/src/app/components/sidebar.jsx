@@ -16,13 +16,13 @@ export class Sidebar extends React.Component {
   }
 
   render() {
-    const { expand, userToken } = this.props;
+    const { expand, user } = this.props;
     return (
       <React.Fragment>
         <h6 className="expand-sidebar" onClick={this.expandSidebar}>>>></h6>
         <div className={`sidebar${expand ? ' sidebar-expand' : ''}`}>
           {
-            userToken ? '' : (
+            user.id ? '' : (
               <div className="login-or-register">
                 <LoginOrRegister />
                 <hr />
@@ -38,13 +38,13 @@ export class Sidebar extends React.Component {
 
 Sidebar.propTypes = {
   expand: PropTypes.bool.isRequired,
-  userToken: PropTypes.string.isRequired,
+  user: PropTypes.objectOf(PropTypes.string).isRequired,
   expandSidebar: PropTypes.func.isRequired,
 };
 
 export const mapStateToProps = state => ({
   expand: state.expandSidebar,
-  userToken: state.userToken,
+  user: state.user,
 });
 
 export const mapDispatchToProps = dispatch => ({

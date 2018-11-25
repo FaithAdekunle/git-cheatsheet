@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<Sidebar /> should match snapshot with userToken 1`] = `
+exports[`<Sidebar /> should match snapshot with user details 1`] = `
 <Fragment>
   <h6
     className="expand-sidebar"
@@ -20,7 +20,7 @@ exports[`<Sidebar /> should match snapshot with userToken 1`] = `
 </Fragment>
 `;
 
-exports[`<Sidebar /> should match snapshot without userToken 1`] = `
+exports[`<Sidebar /> should match snapshot without user details 1`] = `
 <Fragment>
   <h6
     className="expand-sidebar"
