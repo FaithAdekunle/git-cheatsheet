@@ -63,3 +63,16 @@
     }
   }
 }
+.delete-category {
+  padding: 1em;
+  background-color: #252a2e;
+  .underline {
+    height: 0.1em;
+    background-color: #31363F;
+    margin: 1.2em 0 0.5em 0;
+  }
+  button {
+    display: inline-block;
+    margin-left: 1em;
+  }
+}

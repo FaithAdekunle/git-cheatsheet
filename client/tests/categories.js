@@ -4,6 +4,7 @@ const categories = [
   {
     title: 'Install GIT',
     _id: mongoose.Types.ObjectId(),
+    userId: mongoose.Types.ObjectId(),
     privacyStatus: false,
     commands: [
       {
@@ -32,6 +33,7 @@ const categories = [
   {
     title: 'Configuration',
     _id: mongoose.Types.ObjectId(),
+    userId: mongoose.Types.ObjectId(),
     privacyStatus: false,
     commands: [
       {
@@ -60,6 +62,7 @@ const categories = [
   {
     title: 'Synchronization and remote repositories',
     _id: mongoose.Types.ObjectId(),
+    userId: mongoose.Types.ObjectId(),
     privacyStatus: false,
     commands: [
       {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { mount } from 'enzyme';
 import categories from '../../categories';
 import { Categories, mapStateToProps, mapDispatchToProps } from '../../../src/app/components/categories/categories';
 import mockState from '../../mockState';
@@ -8,6 +8,8 @@ const categoriesProps = {
   categories,
   fetchCategories: jest.fn(),
   user: { token: '', id: '' },
+  togglePrivacyStatus: jest.fn(),
+  deleteCategory: jest.fn(),
 };
 
 const mockEvent = value => ({
@@ -22,8 +24,10 @@ let wrapper;
 describe('<Categories />', () => {
   beforeEach(() => {
     categoriesProps.fetchCategories.mockClear();
+    categoriesProps.deleteCategory.mockClear();
+    categoriesProps.togglePrivacyStatus.mockClear();
     dispatch.mockClear();
-    wrapper = shallow(<Categories {...categoriesProps} />);
+    wrapper = mount(<Categories {...categoriesProps} />);
   });
 
   test('should call fetchCategories prop method when component mounts', () => {
@@ -41,7 +45,7 @@ describe('<Categories />', () => {
 
   test('should not render search field, expand/collapse buttons and container for all categories', () => {
     const props = { ...categoriesProps, categories: [] };
-    wrapper = shallow(<Categories {...props} />);
+    wrapper = mount(<Categories {...props} />);
     const searchFieldContainer = wrapper.find('.command-keywords-search-container');
     const expandOrCollapseButton = wrapper.find('.expand-or-collapse');
     const categoryComponent = wrapper.find('.category-component');
@@ -58,6 +62,72 @@ describe('<Categories />', () => {
     wrapper.update();
     expandOrCollapseButton = wrapper.find('.expand-or-collapse');
     expect(expandOrCollapseButton.text()).toBe('Collapse All');
+  });
+
+  test('should add expand class to each rendered category', () => {
+    let expandCategory;
+    expandCategory = wrapper.find('.expand');
+    expect(expandCategory.length).toBe(0);
+    const expandOrCollapseButton = wrapper.find('.expand-or-collapse');
+    expandOrCollapseButton.simulate('click');
+    wrapper.update();
+    expandCategory = wrapper.find('.expand');
+    expect(expandCategory.length).toBe(categories.length);
+  });
+
+  test('should add expand class to clicked category', () => {
+    let expandCategory;
+    expandCategory = wrapper.find('.expand');
+    expect(expandCategory.length).toBe(0);
+    const categoryHeaders = wrapper.find('.category-header');
+    categoryHeaders.first().simulate('click');
+    wrapper.update();
+    expandCategory = wrapper.find('.expand');
+    expect(expandCategory.length).toBe(1);
+  });
+
+  test('display corresponding privacy status', () => {
+    const props = {
+      ...categoriesProps,
+      user: { token: 'token', id: categories[0].userId },
+      categories: [{ ...categories[0], privacyStatus: true }],
+    };
+    wrapper = mount(<Categories {...props} />);
+    const toggleButton = wrapper.find('.privacy');
+    expect(toggleButton.text()).toBe('set to public');
+  });
+
+  test('should call deleteCategory prop method', () => {
+    const props = { ...categoriesProps, user: { token: 'token', id: categories[0].userId } };
+    wrapper = mount(<Categories {...props} />);
+    const toggleButton = wrapper.find('.privacy');
+    expect(toggleButton.text()).toBe('set to private');
+    toggleButton.simulate('click');
+    expect(categoriesProps.togglePrivacyStatus).toHaveBeenCalledTimes(1);
+  });
+
+  test('should call deleteCategory prop method', () => {
+    const user = { token: 'token', id: categories[0].userId };
+    const props = { ...categoriesProps, user };
+    wrapper = mount(<Categories {...props} />);
+    const deleteIcon = wrapper.find('.delete-category-icon');
+    deleteIcon.simulate('click');
+    wrapper.update();
+    const deleteButton = wrapper.find('.delete-category-button');
+    deleteButton.simulate('click');
+    expect(categoriesProps.deleteCategory).toHaveBeenCalledWith(categories[0]._id, user.token);
+  });
+
+  test('should abort delete category action', () => {
+    const props = { ...categoriesProps, user: { token: 'token', id: categories[0].userId } };
+    wrapper = mount(<Categories {...props} />);
+    const deleteIcon = wrapper.find('.delete-category-icon');
+    deleteIcon.simulate('click');
+    expect(wrapper.state('categoryToBeDeleted')).toEqual(categories[0]);
+    wrapper.update();
+    const abortButton = wrapper.find('.abort-delete-category-button');
+    abortButton.simulate('click');
+    expect(wrapper.state('categoryToBeDeleted')).toBe(null);
   });
 
   test('should filter categories based on search keywords', () => {
@@ -90,6 +160,8 @@ describe('<Categories />', () => {
   test('should return required actions', () => {
     const actions = mapDispatchToProps(dispatch);
     actions.fetchCategories();
-    expect(dispatch).toHaveBeenCalledTimes(1);
+    actions.togglePrivacyStatus();
+    actions.deleteCategory();
+    expect(dispatch).toHaveBeenCalledTimes(3);
   });
 });

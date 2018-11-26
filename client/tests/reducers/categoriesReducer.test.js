@@ -1,6 +1,10 @@
 import categoriesReducer from '../../src/app/reducers/categoriesReducer';
 import initialState from '../../src/app/reducers/initialState';
-import { fetchCategoriesSuccess, toggleCategoryPrivacySuccess } from '../../src/app/actions/actionTypes';
+import {
+  fetchCategoriesSuccess,
+  toggleCategoryPrivacySuccess,
+  deleteCategorySuccess,
+} from '../../src/app/actions/actionTypes';
 import categories from '../categories';
 
 describe('categoriesReducer', () => {
@@ -15,14 +19,20 @@ describe('categoriesReducer', () => {
 
   test('should toggle category privacy status', () => {
     const id = categories[0]._id;
-    console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', id);
     expect(categoriesReducer(
       categories,
       { type: toggleCategoryPrivacySuccess, id },
     )).toEqual(categories.map((category) => {
-      console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', category._id);
       if (category._id === id) return { ...category, privacyStatus: !category.privacyStatus };
       return category;
     }));
+  });
+
+  test('should remove category', () => {
+    const id = categories[0]._id;
+    expect(categoriesReducer(
+      categories,
+      { type: deleteCategorySuccess, id },
+    )).toEqual(categories.filter(category => category._id !== id));
   });
 });

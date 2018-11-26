@@ -1,16 +1,13 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import ModalOverlay from './modalOverlay';
+import Modal from './modal';
 
 const Loader = () => (
-  <div className="common">
-    <ModalOverlay />
-    <div className="fixed loader-modal">
-      <div className="spinner">
-        <FontAwesomeIcon icon="spinner" className="fa-spin" />
-      </div>
+  <Modal>
+    <div className="spinner">
+      <FontAwesomeIcon icon="spinner" className="fa-spin" />
     </div>
-  </div>
+  </Modal>
 );
 
 export default Loader;

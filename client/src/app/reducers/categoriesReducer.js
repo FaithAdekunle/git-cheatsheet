@@ -1,5 +1,9 @@
 import { categories } from './initialState';
-import { fetchCategoriesSuccess, toggleCategoryPrivacySuccess } from '../actions/actionTypes';
+import {
+  deleteCategorySuccess,
+  fetchCategoriesSuccess,
+  toggleCategoryPrivacySuccess,
+} from '../actions/actionTypes';
 
 const categoriesReducer = (state = categories, action) => {
   switch (action.type) {
@@ -12,6 +16,8 @@ const categoriesReducer = (state = categories, action) => {
         }
         return category;
       });
+    case deleteCategorySuccess:
+      return state.filter(category => category._id !== action.id);
     default:
       return state;
   }
