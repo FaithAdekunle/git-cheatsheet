@@ -27,6 +27,10 @@ class AjaxHelpers {
   static async toggleCategoryPrivacy(id, token) {
     await axios.put(`/api/categories/${id}/toggle?token=${token}`);
   }
+
+  static async deleteCategory(id, token) {
+    await axios.delete(`/api/categories/${id}?token=${token}`);
+  }
 }
 
 export default AjaxHelpers;

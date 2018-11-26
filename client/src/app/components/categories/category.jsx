@@ -1,17 +1,16 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Command from './command';
-import CategoriesActions from '../../actions/categoriesActions';
 
-export class Category extends Component {
+class Category extends Component {
   constructor(props) {
     super(props);
     this.state = { expand: false };
     this.toggleExpansion = this.toggleExpansion.bind(this);
     this.hasKeyWord = this.hasKeyWord.bind(this);
     this.togglePrivacyStatus = this.togglePrivacyStatus.bind(this);
+    this.launchDelete = this.launchDelete.bind(this);
   }
 
   componentDidMount() {
@@ -24,13 +23,18 @@ export class Category extends Component {
     if (expandAll !== prevProps.expandAll) this.setState({ expand: expandAll });
   }
 
+  launchDelete() {
+    const { launchDelete, category } = this.props;
+    launchDelete(category);
+  }
+
   toggleExpansion() {
     this.setState(prevState => ({ expand: !prevState.expand }));
   }
 
   togglePrivacyStatus() {
-    const { user, togglePrivacyStatus, category } = this.props;
-    togglePrivacyStatus(category._id, user.token);
+    const { togglePrivacyStatus, category } = this.props;
+    togglePrivacyStatus(category._id);
   }
 
   hasKeyWord(command) {
@@ -60,8 +64,10 @@ export class Category extends Component {
                   {`set to ${category.privacyStatus ? 'public' : 'private'}`}
                 </span>
                 <span>
-                  <FontAwesomeIcon icon="pen" />
-                  <FontAwesomeIcon icon="trash" />
+                  <span className="edit-category-icon"><FontAwesomeIcon icon="pen" /></span>
+                  <span className="delete-category-icon" onClick={this.launchDelete}>
+                    <FontAwesomeIcon icon="trash" />
+                  </span>
                 </span>
               </div>
             ) : ''
@@ -85,14 +91,9 @@ Category.propTypes = {
   category: PropTypes.objectOf(PropTypes.any).isRequired,
   expandAll: PropTypes.bool.isRequired,
   keyword: PropTypes.string.isRequired,
-  user: PropTypes.objectOf(PropTypes.string).isRequired,
+  user: PropTypes.objectOf(PropTypes.any).isRequired,
   togglePrivacyStatus: PropTypes.func.isRequired,
+  launchDelete: PropTypes.func.isRequired,
 };
 
-export const mapStateToProps = () => ({});
-
-export const mapDispatchToProps = dispatch => ({
-  togglePrivacyStatus: (id, token) => dispatch(CategoriesActions.toggleCategoryPrivacy(id, token)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Category);
+export default Category;

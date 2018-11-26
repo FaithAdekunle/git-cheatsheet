@@ -1,11 +1,11 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import toJson from 'enzyme-to-json';
-import ModalOverlay from '../../../src/app/components/common/modalOverlay';
+import Modal from '../../../src/app/components/common/modal';
 
 describe('<ModalOverlay />', () => {
   test('should match snapshot', () => {
-    const wrapper = shallow(<ModalOverlay />);
+    const wrapper = shallow(<Modal children={{}} />);
     expect(toJson(wrapper)).toMatchSnapshot();
   });
 });

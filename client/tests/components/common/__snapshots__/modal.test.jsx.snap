@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ModalOverlay /> should match snapshot 1`] = `
+<Fragment>
+  <div
+    className="modal-overlay"
+  />
+  <div
+    className="app-modal"
+  >
+    <div
+      className="app-modal-content-wrapper"
+    >
+      <Component />
+    </div>
+  </div>
+</Fragment>
+`;
