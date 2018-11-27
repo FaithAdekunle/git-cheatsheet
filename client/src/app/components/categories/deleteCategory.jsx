@@ -12,10 +12,10 @@ const DeleteCategory = ({ category, abort, deleteCategory }) => (
         <span>All commands in this category will also be removed...</span>
         <div className="underline" />
         <div className="text-right">
-          <button type="button" className="abort-delete-category-button" onClick={() => abort()}>
+          <button type="button" className="abort-delete-category-button" onClick={abort}>
             Abort
           </button>
-          <button type="button" className="delete-category-button" onClick={() => deleteCategory()}>
+          <button type="button" className="delete-category-button" onClick={deleteCategory}>
             Delete anyway
           </button>
         </div>

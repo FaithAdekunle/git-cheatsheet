@@ -7,7 +7,6 @@ class CommandSchema {
       keywords: [{ type: String }],
       categoryId: { type: Schema.Types.ObjectId, ref: 'Category', required: true },
       userId: { type: String, required: true },
-      privacyStatus: { type: Boolean, default: false },
     });
     return mongoose.model('Command', schema);
   }

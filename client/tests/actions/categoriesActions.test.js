@@ -3,7 +3,9 @@ import thunk from 'redux-thunk';
 import moxios from 'moxios';
 import {
   beginAjaxCall,
+  createCategorySuccess,
   deleteCategorySuccess,
+  editCategorySuccess,
   fetchCategoriesSuccess,
   toggleCategoryPrivacySuccess,
 } from '../../src/app/actions/actionTypes';
@@ -70,6 +72,40 @@ describe('categoriesActions', () => {
       { type: deleteCategorySuccess, id },
     ];
     await store.dispatch(CategoriesActions.deleteCategory(id));
+    expect(store.getActions()).toEqual(expectedActions);
+  });
+
+  test('should create editCategorySuccess action after editing', async () => {
+    const category = { _id: 'test-id' };
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({
+        status: 200,
+        response: {},
+      });
+    });
+    const expectedActions = [
+      { type: beginAjaxCall },
+      { type: editCategorySuccess, category },
+    ];
+    await store.dispatch(CategoriesActions.createOrEditCategory(category));
+    expect(store.getActions()).toEqual(expectedActions);
+  });
+
+  test('should create createCategorySuccess action after creating', async () => {
+    const category = { _id: 'test-id' };
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({
+        status: 200,
+        response: { category },
+      });
+    });
+    const expectedActions = [
+      { type: beginAjaxCall },
+      { type: createCategorySuccess, category },
+    ];
+    await store.dispatch(CategoriesActions.createOrEditCategory({}));
     expect(store.getActions()).toEqual(expectedActions);
   });
 });

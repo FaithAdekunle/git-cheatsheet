@@ -127,23 +127,6 @@ describe('commands', () => {
     expect(response.body.error).toBe('command not found');
   });
 
-  test('toggle command privacy status', async () => {
-    const categories = await Category.find({});
-    const response = await chai.request(host)
-      .put(`/api/commands/${categories[0].commands[0]}/toggle`)
-      .query({ token: user1Token });
-    expect(response.body.success).toBe(true);
-  });
-
-  test('toggle command privacy status with unauthorized token', async () => {
-    const categories = await Category.find({});
-    const response = await chai.request(host)
-      .put(`/api/commands/${categories[0].commands[0]}/toggle`)
-      .query({ token: user2Token });
-    expect(response.body.success).toBe(false);
-    expect(response.body.error).toBe('unauthorized');
-  });
-
   test('delete command', async () => {
     const categories = await Category.find({});
     const commands = [{

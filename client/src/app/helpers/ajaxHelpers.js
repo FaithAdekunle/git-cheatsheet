@@ -31,6 +31,15 @@ class AjaxHelpers {
   static async deleteCategory(id, token) {
     await axios.delete(`/api/categories/${id}?token=${token}`);
   }
+
+  static async editCategory(category, token) {
+    await axios.put(`/api/categories/${category._id}?token=${token}`, { category });
+  }
+
+  static async createCategory(category, token) {
+    const { data } = await axios.post(`/api/categories?token=${token}`, { category });
+    return data;
+  }
 }
 
 export default AjaxHelpers;

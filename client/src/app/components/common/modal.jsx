@@ -13,7 +13,7 @@ const Modal = ({ children }) => (
 );
 
 Modal.propTypes = {
-  children: PropTypes.objectOf(PropTypes.any).isRequired,
+  children: PropTypes.any.isRequired,
 };
 
 export default Modal;

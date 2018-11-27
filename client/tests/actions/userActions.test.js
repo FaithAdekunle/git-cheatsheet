@@ -1,7 +1,12 @@
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import moxios from 'moxios';
-import { beginAjaxCall, authenticateSuccess, mockSuccess } from '../../src/app/actions/actionTypes';
+import {
+  beginAjaxCall,
+  authenticateSuccess,
+  mockSuccess,
+  expandSidebar,
+} from '../../src/app/actions/actionTypes';
 import UserActions from '../../src/app/actions/userActions';
 
 const mockStore = configureStore([thunk]);
@@ -34,6 +39,7 @@ describe('userActions', () => {
       { type: beginAjaxCall },
       { type: beginAjaxCall },
       { type: authenticateSuccess, user },
+      { type: expandSidebar, expand: false },
     ];
     await store.dispatch(UserActions.login(credentials));
     expect(store.getActions()).toEqual(expectedActions);
@@ -70,6 +76,7 @@ describe('userActions', () => {
       { type: beginAjaxCall },
       { type: beginAjaxCall },
       { type: authenticateSuccess, user },
+      { type: expandSidebar, expand: false },
     ];
     await store.dispatch(UserActions.register(credentials));
     expect(store.getActions()).toEqual(expectedActions);

@@ -17,8 +17,6 @@ class CommandRoutes {
 
     router.put('/:id/move', userControllers.authorize, commandControllers.confirmCommand, commandControllers.moveCommand);
 
-    router.put('/:id/toggle', userControllers.authorize, commandControllers.confirmCommand, commandControllers.togglePrivacyStatus);
-
     router.put('/:id', userControllers.authorize, commandControllers.confirmCommand, commandControllers.updateCommand);
 
     return router;
