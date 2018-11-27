@@ -2,6 +2,7 @@ import { authenticateSuccess, mockSuccess } from './actionTypes';
 import AjaxCallsInProgressAction from './ajaxCallsInProgressAction';
 import AjaxHelpers from '../helpers/ajaxHelpers';
 import CategoriesActions from './categoriesActions';
+import expandOrCollapseSidebar from './sidebarAction';
 
 class UserActions {
   static authenticateSuccess(user) {
@@ -14,7 +15,8 @@ class UserActions {
       const user = await AjaxHelpers.login(credentials);
       if (user.success) {
         dispatch(CategoriesActions.fetchCategories(user.token));
-        return dispatch(UserActions.authenticateSuccess({ token: user.token, id: user.id }));
+        dispatch(UserActions.authenticateSuccess({ token: user.token, id: user.id }));
+        return dispatch(expandOrCollapseSidebar(false));
       }
       dispatch({ type: mockSuccess });
       throw new Error(user.error);
@@ -27,7 +29,8 @@ class UserActions {
       const user = await AjaxHelpers.register(credentials);
       if (user.success) {
         dispatch(CategoriesActions.fetchCategories(user.token));
-        return dispatch(UserActions.authenticateSuccess({ token: user.token, id: user.id }));
+        dispatch(UserActions.authenticateSuccess({ token: user.token, id: user.id }));
+        return dispatch(expandOrCollapseSidebar(false));
       }
       dispatch({ type: mockSuccess });
       throw new Error(user.error);

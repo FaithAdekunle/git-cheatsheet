@@ -2,11 +2,25 @@ import jwt from 'jsonwebtoken';
 
 class CategoryController {
   static saveCategory(models) {
-    const { Category } = models;
+    const { Category, Command } = models;
     return async (req, res) => {
       const { category } = req.body;
-      const createdCategory = await Category.create({ ...category, userId: req.userId });
-      res.json({ success: true, category: createdCategory });
+      let createdCategory = await Category.create({
+        userId: req.userId,
+        title: category.title,
+        privacyStatus: category.privacyStatus,
+      });
+      const createdCommands = await Command
+        .create(category
+          .commands
+          .map(command => ({ ...command, categoryId: createdCategory._id, userId: req.userId })));
+      await Category
+        .findOneAndUpdate(
+          { _id: createdCategory._id },
+          { commands: [...createdCommands.map(command => command._id)] },
+        );
+      createdCategory = await Category.findOne({ _id: createdCategory._id }).populate('commands');
+      res.status(201).json({ success: true, category: createdCategory });
     };
   }
 
@@ -20,10 +34,7 @@ class CategoryController {
           const user = await User.findOne({ email });
           if (user) {
             const categories = await Category
-              .find({ $or: [{ privacyStatus: false }, { userId: user._id }] }).populate({
-                path: 'commands',
-                match: { $or: [{ privacyStatus: false }, { userId: user._id }] },
-              });
+              .find({ $or: [{ privacyStatus: false }, { userId: user._id }] }).populate('commands');
             return res.json({ success: true, categories });
           }
           return res.json({ success: false, error: 'unauthenticated token' });
@@ -31,10 +42,7 @@ class CategoryController {
           return res.json({ success: false, error: 'bad token' });
         }
       }
-      const categories = await Category.find({ privacyStatus: false }).populate({
-        path: 'commands',
-        match: { privacyStatus: false },
-      });
+      const categories = await Category.find({ privacyStatus: false }).populate('commands');
       return res.json({ success: true, categories });
     };
   }
@@ -60,10 +68,10 @@ class CategoryController {
     return async (req, res) => {
       const { id } = req.params;
       const { category } = req.body;
-      const update = await Category.findOneAndUpdate({ _id: id }, category);
-      if (update) {
-        if (update.userId == req.userId) {
-          const updatedCategory = await Category.findOne({ _id: id });
+      const categoryToBeUpdated = await Category.findOne({ _id: id });
+      if (categoryToBeUpdated) {
+        if (categoryToBeUpdated.userId == req.userId) {
+          const updatedCategory = await Category.findOneAndUpdate({ _id: id }, category);
           return res.json({ success: true, category: updatedCategory });
         }
         return res.status(401).json({ success: false, error: 'unauthorized' });

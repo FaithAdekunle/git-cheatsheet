@@ -9,11 +9,12 @@ const categoriesProps = {
   fetchCategories: jest.fn(),
   user: { token: '', id: '' },
   togglePrivacyStatus: jest.fn(),
-  deleteCategory: jest.fn(),
+  deleteCategory: jest.fn(() => new Promise(resolve => resolve())),
+  createOrEditCategory: jest.fn(() => new Promise(resolve => resolve())),
 };
 
-const mockEvent = value => ({
-  target: { value },
+const mockEvent = (value, name, checked) => ({
+  target: { value, name, checked },
   preventDefault: jest.fn(),
 });
 
@@ -26,6 +27,7 @@ describe('<Categories />', () => {
     categoriesProps.fetchCategories.mockClear();
     categoriesProps.deleteCategory.mockClear();
     categoriesProps.togglePrivacyStatus.mockClear();
+    categoriesProps.createOrEditCategory.mockClear();
     dispatch.mockClear();
     wrapper = mount(<Categories {...categoriesProps} />);
   });
@@ -97,7 +99,7 @@ describe('<Categories />', () => {
     expect(toggleButton.text()).toBe('set to public');
   });
 
-  test('should call deleteCategory prop method', () => {
+  test('should call togglePrivacyStatus prop method', () => {
     const props = { ...categoriesProps, user: { token: 'token', id: categories[0].userId } };
     wrapper = mount(<Categories {...props} />);
     const toggleButton = wrapper.find('.privacy');
@@ -128,6 +130,171 @@ describe('<Categories />', () => {
     const abortButton = wrapper.find('.abort-delete-category-button');
     abortButton.simulate('click');
     expect(wrapper.state('categoryToBeDeleted')).toBe(null);
+  });
+
+  test('should call createOrEditCategory prop method', () => {
+    const user = { token: 'token', id: categories[0].userId };
+    const props = { ...categoriesProps, user };
+    wrapper = mount(<Categories {...props} />);
+    const editIcon = wrapper.find('.edit-category-icon');
+    editIcon.simulate('click');
+    wrapper.update();
+    const editForm = wrapper.find('.add-or-edit-category-form');
+    editForm.simulate('submit');
+    expect(categoriesProps.createOrEditCategory).toHaveBeenCalledWith({
+      _id: categories[0]._id,
+      userId: categories[0].userId,
+      title: categories[0].title,
+      privacyStatus: categories[0].privacyStatus,
+    }, user.token);
+  });
+
+  test('should maintain edit category form state', () => {
+    const user = { token: 'token', id: categories[0].userId };
+    const props = { ...categoriesProps, user };
+    const testTitle = 'test title';
+    wrapper = mount(<Categories {...props} />);
+    let editIcon = wrapper.find('.edit-category-icon');
+    editIcon.simulate('click');
+    wrapper.update();
+    let titleField = wrapper.find('.title-field');
+    let privacyCheckbox = wrapper.find('input[name="privacyStatus"]');
+    titleField.simulate('change', mockEvent(testTitle, 'title'));
+    privacyCheckbox.simulate('change', mockEvent(undefined, 'privacyStatus', false));
+    const abortButton = wrapper.find('.abort-add-or-edit-category-button');
+    abortButton.simulate('click');
+    editIcon = wrapper.find('.edit-category-icon');
+    editIcon.simulate('click');
+    wrapper.update();
+    titleField = wrapper.find('.title-field');
+    privacyCheckbox = wrapper.find('input[name="privacyStatus"]');
+    expect(titleField.props().value).toBe(testTitle);
+    expect(privacyCheckbox.props().defaultChecked).toBe(false);
+  });
+
+  test('should set error message for empty title field', () => {
+    const user = { token: 'token', id: categories[0].userId };
+    const props = { ...categoriesProps, user };
+    wrapper = mount(<Categories {...props} />);
+    const editIcon = wrapper.find('.edit-category-icon');
+    editIcon.simulate('click');
+    wrapper.update();
+    const titleField = wrapper.find('.title-field');
+    titleField.simulate('change', mockEvent('', 'title'));
+    wrapper.update();
+    const errors = wrapper.find('.error');
+    expect(errors.first().text()).toBe('title field cannot be empty');
+  });
+
+  test('should add and remove command input groups in add category modal', () => {
+    const user = { token: 'token', id: categories[0].userId };
+    const props = { ...categoriesProps, user };
+    wrapper = mount(<Categories {...props} />);
+    const launchAddCategoryButton = wrapper.find('.launch-add-category-button');
+    launchAddCategoryButton.simulate('click');
+    wrapper.update();
+    let commandInputGroups = wrapper.find('.command-input-group');
+    let removeCategoryCommandIcon = wrapper.find('.remove-category-command-icon');
+    expect(removeCategoryCommandIcon.length).toBe(0);
+    expect(commandInputGroups.length).toBe(1);
+    const addCategoryCommandIcon = wrapper.find('.add-category-command-icon');
+    addCategoryCommandIcon.simulate('click');
+    wrapper.update();
+    commandInputGroups = wrapper.find('.command-input-group');
+    removeCategoryCommandIcon = wrapper.find('.remove-category-command-icon');
+    expect(removeCategoryCommandIcon.length).toBe(2);
+    expect(commandInputGroups.length).toBe(2);
+    removeCategoryCommandIcon.first().simulate('click');
+    wrapper.update();
+    commandInputGroups = wrapper.find('.command-input-group');
+    removeCategoryCommandIcon = wrapper.find('.remove-category-command-icon');
+    expect(removeCategoryCommandIcon.length).toBe(0);
+    expect(commandInputGroups.length).toBe(1);
+  });
+
+  test('should prevent submission of category when required fields are empty', () => {
+    const user = { token: 'token', id: categories[0].userId };
+    const props = { ...categoriesProps, user };
+    wrapper = mount(<Categories {...props} />);
+    const launchAddCategoryButton = wrapper.find('.launch-add-category-button');
+    launchAddCategoryButton.simulate('click');
+    wrapper.update();
+    let editForm = wrapper.find('.add-or-edit-category-form');
+    editForm.simulate('submit');
+    wrapper.update();
+    let errors = wrapper.find('.error');
+    expect(errors.length).toBe(2);
+    expect(errors.first().text()).toBe('title field cannot be empty');
+    expect(errors.last().text()).toBe('script and description fields cannot be empty');
+    const titleField = wrapper.find('.title-field');
+    const scriptField = wrapper.find('input[name="script"]');
+    titleField.simulate('change', mockEvent('test-title', 'title'));
+    scriptField.simulate('change', mockEvent('git script test', 'script'));
+    wrapper.update();
+    editForm = wrapper.find('.add-or-edit-category-form');
+    editForm.simulate('submit');
+    wrapper.update();
+    errors = wrapper.find('.error');
+    expect(errors.last().text()).toBe('description field cannot be empty');
+  });
+
+  test('should call createOrEditCategory prop method', () => {
+    const category = {
+      title: 'test-title',
+      privacyStatus: false,
+      commands: [{
+        script: 'git script test',
+        description: 'test description',
+        keywords: ['key', 'words'],
+      }],
+    };
+    const user = { token: 'token', id: categories[0].userId };
+    const props = { ...categoriesProps, user };
+    wrapper = mount(<Categories {...props} />);
+    const launchAddCategoryButton = wrapper.find('.launch-add-category-button');
+    launchAddCategoryButton.simulate('click');
+    wrapper.update();
+    const titleField = wrapper.find('.title-field');
+    const scriptField = wrapper.find('input[name="script"]');
+    const descriptionField = wrapper.find('input[name="description"]');
+    const keywordsField = wrapper.find('input[name="keywords"]');
+    titleField.simulate('change', mockEvent(category.title, 'title'));
+    scriptField.simulate('change', mockEvent(category.commands[0].script, 'script'));
+    descriptionField.simulate('change', mockEvent(category.commands[0].description, 'description'));
+    keywordsField.simulate(
+      'change',
+      mockEvent(category.commands[0].keywords.join(','), 'keywords'),
+    );
+    const editForm = wrapper.find('.add-or-edit-category-form');
+    editForm.simulate('submit');
+    expect(categoriesProps.createOrEditCategory).toHaveBeenCalledWith(category, user.token);
+  });
+
+  test('should call createOrEditCategory prop method', () => {
+    const category = {
+      title: 'test-title',
+      privacyStatus: false,
+      commands: [{
+        script: 'git script test',
+        description: 'test description',
+        keywords: [],
+      }],
+    };
+    const user = { token: 'token', id: categories[0].userId };
+    const props = { ...categoriesProps, user };
+    wrapper = mount(<Categories {...props} />);
+    const launchAddCategoryButton = wrapper.find('.launch-add-category-button');
+    launchAddCategoryButton.simulate('click');
+    wrapper.update();
+    const titleField = wrapper.find('.title-field');
+    const scriptField = wrapper.find('input[name="script"]');
+    const descriptionField = wrapper.find('input[name="description"]');
+    titleField.simulate('change', mockEvent(category.title, 'title'));
+    scriptField.simulate('change', mockEvent(category.commands[0].script, 'script'));
+    descriptionField.simulate('change', mockEvent(category.commands[0].description, 'description'));
+    const editForm = wrapper.find('.add-or-edit-category-form');
+    editForm.simulate('submit');
+    expect(categoriesProps.createOrEditCategory).toHaveBeenCalledWith(category, user.token);
   });
 
   test('should filter categories based on search keywords', () => {
@@ -162,6 +329,7 @@ describe('<Categories />', () => {
     actions.fetchCategories();
     actions.togglePrivacyStatus();
     actions.deleteCategory();
-    expect(dispatch).toHaveBeenCalledTimes(3);
+    actions.createOrEditCategory();
+    expect(dispatch).toHaveBeenCalledTimes(4);
   });
 });

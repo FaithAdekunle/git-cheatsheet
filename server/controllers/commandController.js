@@ -63,19 +63,6 @@ class CommandController {
     };
   }
 
-  static togglePrivacyStatus(models) {
-    const { Command } = models;
-    return async (req, res) => {
-      const command = await Command.findOne({ _id: req.params.id });
-      if (req.userId == command.userId) {
-        await Command
-          .findOneAndUpdate({ _id: req.params.id }, { privacyStatus: !command.privacyStatus });
-        return res.json({ success: true });
-      }
-      return res.status(401).json({ success: false, error: 'unauthorized' });
-    };
-  }
-
   static moveCommand(models) {
     const { Category, Command } = models;
     return async (req, res) => {
@@ -115,7 +102,6 @@ class CommandController {
       updateCommand: CommandController.updateCommand(models),
       moveCommand: CommandController.moveCommand(models),
       confirmCommand: CommandController.confirmCommand(models),
-      togglePrivacyStatus: CommandController.togglePrivacyStatus(models),
     };
   }
 }

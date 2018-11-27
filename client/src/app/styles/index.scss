@@ -20,4 +20,13 @@ body {
 
   @import "common";
   @import "sidebar";
+
+  .loader {
+    .modal-overlay {
+      z-index: 198;
+    }
+    .app-modal {
+      z-index: 199;
+    }
+  }
 }

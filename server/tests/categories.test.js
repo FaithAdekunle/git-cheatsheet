@@ -53,6 +53,12 @@ describe('categories', () => {
   test('create category with authorized token', async () => {
     const category = {
       title: 'testing post category title',
+      commands: [
+        {
+          script: 'test script',
+          description: 'test description',
+        },
+      ],
     };
     const response = await chai
       .request(host)
@@ -61,11 +67,19 @@ describe('categories', () => {
       .query({ token: user1Token });
     expect(response.body.success).toBe(true);
     expect(response.body.category.title).toBe(category.title);
+    expect(response.body.category.commands[0].script).toBe(category.commands[0].script);
+    expect(response.body.category.commands[0].description).toBe(category.commands[0].description);
   });
 
   test('create category with invalid token', async () => {
     const category = {
       title: 'testing post category title',
+      commands: [
+        {
+          script: 'test script',
+          description: 'test description',
+        },
+      ],
     };
     const response = await chai
       .request(host)
@@ -79,6 +93,12 @@ describe('categories', () => {
   test('create category with non-existing token', async () => {
     const category = {
       title: 'testing post category title',
+      commands: [
+        {
+          script: 'test script',
+          description: 'test description',
+        },
+      ],
     };
     const response = await chai
       .request(host)
@@ -92,6 +112,12 @@ describe('categories', () => {
   test('delete existing category', async () => {
     const category = {
       title: 'testing delete category title',
+      commands: [
+        {
+          script: 'test script',
+          description: 'test description',
+        },
+      ],
     };
     const createResponse = await chai
       .request(host)
@@ -108,6 +134,12 @@ describe('categories', () => {
   test('delete existing category with unauthorized token', async () => {
     const category = {
       title: 'testing delete category title',
+      commands: [
+        {
+          script: 'test script',
+          description: 'test description',
+        },
+      ],
     };
     const createResponse = await chai
       .request(host)
@@ -134,6 +166,12 @@ describe('categories', () => {
   test('update existing category', async () => {
     const category = {
       title: 'testing update category title',
+      commands: [
+        {
+          script: 'test script',
+          description: 'test description',
+        },
+      ],
     };
     const categoryUpdate = {
       title: 'updated category title',
@@ -153,6 +191,12 @@ describe('categories', () => {
   test('update existing category with unauthorized token', async () => {
     const category = {
       title: 'testing update category title',
+      commands: [
+        {
+          script: 'test script',
+          description: 'test description',
+        },
+      ],
     };
     const categoryUpdate = {
       title: 'updated category title',
@@ -173,6 +217,12 @@ describe('categories', () => {
   test('update non-existing category', async () => {
     const category = {
       title: 'updated category title',
+      commands: [
+        {
+          script: 'test script',
+          description: 'test description',
+        },
+      ],
     };
     const updateResponse = await chai
       .request(host)
@@ -186,6 +236,12 @@ describe('categories', () => {
   test('toggle category privacy status', async () => {
     const category = {
       title: 'testing toggle category title',
+      commands: [
+        {
+          script: 'test script',
+          description: 'test description',
+        },
+      ],
     };
     const createResponse = await chai.request(host)
       .post('/api/categories')
@@ -201,6 +257,12 @@ describe('categories', () => {
   test('toggle category privacy status with unauthorized token', async () => {
     const category = {
       title: 'testing toggle category title',
+      commands: [
+        {
+          script: 'test script',
+          description: 'test description',
+        },
+      ],
     };
     const createResponse = await chai.request(host)
       .post('/api/categories')

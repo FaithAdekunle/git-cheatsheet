@@ -20,6 +20,9 @@
   justify-content: space-around;
   .app-modal-content-wrapper {
     margin: 0 auto;
+    max-height: 80vh;
+    min-width: 50vw;
+    overflow-y: scroll;
   }
 }
 .spinner {

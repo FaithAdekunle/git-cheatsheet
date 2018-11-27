@@ -7,13 +7,15 @@ import {
   faSearch,
   faPen,
   faTrash,
+  faMinusCircle,
+  faPlusCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import App from './app/components/App';
 import configureStore from './app/store';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './app/styles/index.scss';
 
-library.add(faSpinner, faSearch, faPen, faTrash);
+library.add(faSpinner, faSearch, faPen, faTrash, faMinusCircle, faPlusCircle);
 
 const store = configureStore();
 

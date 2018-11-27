@@ -4,6 +4,7 @@ import {
   fetchCategoriesSuccess,
   toggleCategoryPrivacySuccess,
   deleteCategorySuccess,
+  createCategorySuccess, editCategorySuccess,
 } from '../../src/app/actions/actionTypes';
 import categories from '../categories';
 
@@ -28,11 +29,37 @@ describe('categoriesReducer', () => {
     }));
   });
 
+  test('should add existing category', () => {
+    const category = { _id: 'newly created category' };
+    expect(categoriesReducer(
+      categories,
+      { type: createCategorySuccess, category },
+    )).toEqual([...categories, category]);
+  });
+
   test('should remove category', () => {
     const id = categories[0]._id;
     expect(categoriesReducer(
-      categories,
+      [...categories],
       { type: deleteCategorySuccess, id },
     )).toEqual(categories.filter(category => category._id !== id));
+  });
+
+  test('should edit new category', () => {
+    const edit = {
+      _id: categories[0]._id,
+      title: 'edited title',
+      privacyStatus: true,
+      userId: categories[0].userId,
+    };
+    expect(categoriesReducer(
+      [...categories],
+      { type: editCategorySuccess, category: edit },
+    )).toEqual(categories.map((category) => {
+      if (category._id === edit._id) {
+        return { ...edit, commands: category.commands };
+      }
+      return category;
+    }));
   });
 });

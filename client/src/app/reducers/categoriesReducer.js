@@ -1,6 +1,8 @@
 import { categories } from './initialState';
 import {
+  createCategorySuccess,
   deleteCategorySuccess,
+  editCategorySuccess,
   fetchCategoriesSuccess,
   toggleCategoryPrivacySuccess,
 } from '../actions/actionTypes';
@@ -18,6 +20,15 @@ const categoriesReducer = (state = categories, action) => {
       });
     case deleteCategorySuccess:
       return state.filter(category => category._id !== action.id);
+    case createCategorySuccess:
+      return [...state, action.category];
+    case editCategorySuccess:
+      return state.map((category) => {
+        if (category._id === action.category._id) {
+          return { ...action.category, commands: category.commands };
+        }
+        return category;
+      });
     default:
       return state;
   }

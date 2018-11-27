@@ -21,9 +21,11 @@ export class App extends React.Component {
     const { ajaxCallsInProgress } = this.props;
     return (
       <React.Fragment>
-        {
-          ajaxCallsInProgress ? <Loader /> : ''
-        }
+        <div className="loader">
+          {
+            ajaxCallsInProgress ? <Loader /> : ''
+          }
+        </div>
         <Sidebar />
         <div className="main" onClick={this.collapseSidebar}>
           <Categories />

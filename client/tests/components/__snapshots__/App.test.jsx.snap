@@ -2,7 +2,11 @@
 
 exports[`<App /> should match snapshot when there are ajaxCallsInProgress 1`] = `
 <Fragment>
-  <Loader />
+  <div
+    className="loader"
+  >
+    <Loader />
+  </div>
   <Connect(Sidebar) />
   <div
     className="main"
@@ -15,6 +19,9 @@ exports[`<App /> should match snapshot when there are ajaxCallsInProgress 1`] = 
 
 exports[`<App /> should match snapshot when there are no ajaxCallsInProgress 1`] = `
 <Fragment>
+  <div
+    className="loader"
+  />
   <Connect(Sidebar) />
   <div
     className="main"

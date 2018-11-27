@@ -11,6 +11,7 @@ class Category extends Component {
     this.hasKeyWord = this.hasKeyWord.bind(this);
     this.togglePrivacyStatus = this.togglePrivacyStatus.bind(this);
     this.launchDelete = this.launchDelete.bind(this);
+    this.launchEdit = this.launchEdit.bind(this);
   }
 
   componentDidMount() {
@@ -26,6 +27,11 @@ class Category extends Component {
   launchDelete() {
     const { launchDelete, category } = this.props;
     launchDelete(category);
+  }
+
+  launchEdit() {
+    const { launchEdit, category } = this.props;
+    launchEdit(category);
   }
 
   toggleExpansion() {
@@ -64,7 +70,9 @@ class Category extends Component {
                   {`set to ${category.privacyStatus ? 'public' : 'private'}`}
                 </span>
                 <span>
-                  <span className="edit-category-icon"><FontAwesomeIcon icon="pen" /></span>
+                  <span className="edit-category-icon" onClick={this.launchEdit}>
+                    <FontAwesomeIcon icon="pen" />
+                  </span>
                   <span className="delete-category-icon" onClick={this.launchDelete}>
                     <FontAwesomeIcon icon="trash" />
                   </span>
@@ -94,6 +102,7 @@ Category.propTypes = {
   user: PropTypes.objectOf(PropTypes.any).isRequired,
   togglePrivacyStatus: PropTypes.func.isRequired,
   launchDelete: PropTypes.func.isRequired,
+  launchEdit: PropTypes.func.isRequired,
 };
 
 export default Category;
