@@ -25,7 +25,7 @@ const categoriesReducer = (state = categories, action) => {
     case editCategorySuccess:
       return state.map((category) => {
         if (category._id === action.category._id) {
-          return { ...action.category, commands: category.commands };
+          return { ...category, ...action.category };
         }
         return category;
       });

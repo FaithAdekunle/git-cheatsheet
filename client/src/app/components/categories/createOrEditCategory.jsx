@@ -72,8 +72,6 @@ class CreateOrEditCategory extends React.Component {
         validCategory = {
           _id: validCategory._id,
           title: validCategory.title,
-          userId: validCategory.userId,
-          privacyStatus: validCategory.privacyStatus,
         };
       } else {
         validCategory.commands = validCategory.commands.map(command => ({
@@ -200,18 +198,22 @@ class CreateOrEditCategory extends React.Component {
                     </React.Fragment>
                   )
                 }
-                <div className="form-check">
-                  <input
-                    className="form-check-input"
-                    type="checkbox"
-                    name="privacyStatus"
-                    defaultChecked={!category.privacyStatus}
-                    onChange={this.onChange}
-                  />
-                  <label className="form-check-label">
-                    Public Status
-                  </label>
-                </div>
+                {
+                  category._id ? '' : (
+                    <div className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        name="privacyStatus"
+                        defaultChecked={!category.privacyStatus}
+                        onChange={this.onChange}
+                      />
+                      <label className="form-check-label">
+                        Public Status
+                      </label>
+                    </div>
+                  )
+                }
                 <div className="underline" />
                 <div className="text-right">
                   <button type="button" className="abort-add-or-edit-category-button" onClick={this.abort}>
