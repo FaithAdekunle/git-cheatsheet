@@ -143,9 +143,7 @@ describe('<Categories />', () => {
     editForm.simulate('submit');
     expect(categoriesProps.createOrEditCategory).toHaveBeenCalledWith({
       _id: categories[0]._id,
-      userId: categories[0].userId,
       title: categories[0].title,
-      privacyStatus: categories[0].privacyStatus,
     }, user.token);
   });
 
@@ -158,18 +156,14 @@ describe('<Categories />', () => {
     editIcon.simulate('click');
     wrapper.update();
     let titleField = wrapper.find('.title-field');
-    let privacyCheckbox = wrapper.find('input[name="privacyStatus"]');
     titleField.simulate('change', mockEvent(testTitle, 'title'));
-    privacyCheckbox.simulate('change', mockEvent(undefined, 'privacyStatus', false));
     const abortButton = wrapper.find('.abort-add-or-edit-category-button');
     abortButton.simulate('click');
     editIcon = wrapper.find('.edit-category-icon');
     editIcon.simulate('click');
     wrapper.update();
     titleField = wrapper.find('.title-field');
-    privacyCheckbox = wrapper.find('input[name="privacyStatus"]');
     expect(titleField.props().value).toBe(testTitle);
-    expect(privacyCheckbox.props().defaultChecked).toBe(false);
   });
 
   test('should set error message for empty title field', () => {
@@ -273,7 +267,7 @@ describe('<Categories />', () => {
   test('should call createOrEditCategory prop method', () => {
     const category = {
       title: 'test-title',
-      privacyStatus: false,
+      privacyStatus: true,
       commands: [{
         script: 'git script test',
         description: 'test description',
@@ -289,9 +283,11 @@ describe('<Categories />', () => {
     const titleField = wrapper.find('.title-field');
     const scriptField = wrapper.find('input[name="script"]');
     const descriptionField = wrapper.find('input[name="description"]');
+    const privacyCheckbox = wrapper.find('input[name="privacyStatus"]');
     titleField.simulate('change', mockEvent(category.title, 'title'));
     scriptField.simulate('change', mockEvent(category.commands[0].script, 'script'));
     descriptionField.simulate('change', mockEvent(category.commands[0].description, 'description'));
+    privacyCheckbox.simulate('change', mockEvent(undefined, 'privacyStatus', false));
     const editForm = wrapper.find('.add-or-edit-category-form');
     editForm.simulate('submit');
     expect(categoriesProps.createOrEditCategory).toHaveBeenCalledWith(category, user.token);
