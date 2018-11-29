@@ -3,10 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "main": "server/index.js",
-  "engines" : {
-    "node" : "8.11.1",
-    "npm": "6.4.1"
-  },
   "nodemonConfig": {
     "ignore": [
       "node_modules/*",
@@ -27,7 +23,8 @@
     "start:client": "webpack-dev-server --config webpack.dev.js & babel-node server",
     "start:dev": "webpack-dev-server --config webpack.dev.js & nodemon --exec babel-node server",
     "start": "npm run build && node build/server",
-    "seed": "babel-node server/seeds"
+    "seed": "babel-node server/seeds",
+    "heroku-prebuild": "npm config set registry http://registry.npmjs.org"
   },
   "keywords": [],
   "author": "",
