@@ -15,8 +15,6 @@ class CommandRoutes {
 
     router.delete('/:id', userControllers.authorize, commandControllers.confirmCommand, commandControllers.deleteCommand);
 
-    router.put('/:id/move', userControllers.authorize, commandControllers.confirmCommand, commandControllers.moveCommand);
-
     router.put('/:id', userControllers.authorize, commandControllers.confirmCommand, commandControllers.updateCommand);
 
     return router;

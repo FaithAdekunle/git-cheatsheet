@@ -6,7 +6,6 @@ class CommandSchema {
       description: { type: String, required: true },
       keywords: [{ type: String }],
       categoryId: { type: Schema.Types.ObjectId, ref: 'Category', required: true },
-      userId: { type: String, required: true },
     });
     return mongoose.model('Command', schema);
   }

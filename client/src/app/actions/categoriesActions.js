@@ -1,6 +1,8 @@
 import {
+  createCategoryCommandsSuccess,
   createCategorySuccess,
   deleteCategorySuccess,
+  editCategoryCommandSuccess,
   editCategorySuccess,
   fetchCategoriesSuccess,
   toggleCategoryPrivacySuccess,
@@ -32,6 +34,14 @@ class CategoriesActions {
     return { type: editCategorySuccess, category };
   }
 
+  static editCategoryCommandSuccess(command) {
+    return { type: editCategoryCommandSuccess, command };
+  }
+
+  static createCategoryCommandsSuccess(commands) {
+    return { type: createCategoryCommandsSuccess, commands };
+  }
+
   static fetchCategories(token = '') {
     return async (dispatch) => {
       dispatch(AjaxCallsInProgressAction.beginAjaxCalls());
@@ -60,12 +70,28 @@ class CategoriesActions {
     return async (dispatch) => {
       dispatch(AjaxCallsInProgressAction.beginAjaxCalls());
       if (category._id) {
-        await AjaxHelpers.editCategory(category, token);
-        dispatch(CategoriesActions.editCategorySuccess(category));
+        const data = await AjaxHelpers.editCategory(category, token);
+        dispatch(CategoriesActions.editCategorySuccess(data.category));
       } else {
         const data = await AjaxHelpers.createCategory(category, token);
         dispatch(CategoriesActions.createCategorySuccess(data.category));
       }
+    };
+  }
+
+  static editCategoryCommand(command, token) {
+    return async (dispatch) => {
+      dispatch(AjaxCallsInProgressAction.beginAjaxCalls());
+      const data = await AjaxHelpers.editCommand(command, token);
+      dispatch(CategoriesActions.editCategoryCommandSuccess(data.command));
+    };
+  }
+
+  static createCategoryCommands(commands, categoryId, token) {
+    return async (dispatch) => {
+      dispatch(AjaxCallsInProgressAction.beginAjaxCalls());
+      const data = await AjaxHelpers.createCommands(commands, categoryId, token);
+      dispatch(CategoriesActions.createCategoryCommandsSuccess(data.commands));
     };
   }
 }

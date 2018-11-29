@@ -71,7 +71,8 @@ class CategoryController {
       const categoryToBeUpdated = await Category.findOne({ _id: id });
       if (categoryToBeUpdated) {
         if (categoryToBeUpdated.userId == req.userId) {
-          const updatedCategory = await Category.findOneAndUpdate({ _id: id }, category);
+          await Category.findOneAndUpdate({ _id: id }, category);
+          const updatedCategory = await Category.findOne({ _id: id });
           return res.json({ success: true, category: updatedCategory });
         }
         return res.status(401).json({ success: false, error: 'unauthorized' });

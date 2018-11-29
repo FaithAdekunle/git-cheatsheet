@@ -2,9 +2,9 @@ import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import moxios from 'moxios';
 import {
-  beginAjaxCall,
+  beginAjaxCall, createCategoryCommandsSuccess,
   createCategorySuccess,
-  deleteCategorySuccess,
+  deleteCategorySuccess, editCategoryCommandSuccess,
   editCategorySuccess,
   fetchCategoriesSuccess,
   toggleCategoryPrivacySuccess,
@@ -81,7 +81,7 @@ describe('categoriesActions', () => {
       const request = moxios.requests.mostRecent();
       request.respondWith({
         status: 200,
-        response: {},
+        response: { category },
       });
     });
     const expectedActions = [
@@ -106,6 +106,40 @@ describe('categoriesActions', () => {
       { type: createCategorySuccess, category },
     ];
     await store.dispatch(CategoriesActions.createOrEditCategory({}));
+    expect(store.getActions()).toEqual(expectedActions);
+  });
+
+  test('should create editCategoryCommandSuccess action after editing command', async () => {
+    const command = { categoryId: 'test-id' };
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({
+        status: 200,
+        response: { command },
+      });
+    });
+    const expectedActions = [
+      { type: beginAjaxCall },
+      { type: editCategoryCommandSuccess, command },
+    ];
+    await store.dispatch(CategoriesActions.editCategoryCommand({}));
+    expect(store.getActions()).toEqual(expectedActions);
+  });
+
+  test('should create createCategoryCommandsSuccess action after creating commands', async () => {
+    const commands = [{ script: 'test-script' }];
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({
+        status: 200,
+        response: { commands },
+      });
+    });
+    const expectedActions = [
+      { type: beginAjaxCall },
+      { type: createCategoryCommandsSuccess, commands },
+    ];
+    await store.dispatch(CategoriesActions.createCategoryCommands({}));
     expect(store.getActions()).toEqual(expectedActions);
   });
 });

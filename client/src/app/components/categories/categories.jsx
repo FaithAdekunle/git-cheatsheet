@@ -6,6 +6,7 @@ import CategoriesActions from '../../actions/categoriesActions';
 import Category from './category';
 import DeleteCategory from './deleteCategory';
 import CreateOrEditCategory from './createOrEditCategory';
+import CreateOrEditCommand from './createOrEditCommand';
 
 export class Categories extends React.Component {
   constructor(props) {
@@ -15,17 +16,21 @@ export class Categories extends React.Component {
       keyword: '',
     };
     this.categoryBeingAddedOrEdited = { _id: '' };
+    this.commandsBeingAddedOrEdited = { commands: [{ _id: '' }], categoryId: '' };
     this.toggleCategoriesExpansion = this.toggleCategoriesExpansion.bind(this);
     this.onKeywordChange = this.onKeywordChange.bind(this);
     this.hasCommandWithKeyword = this.hasCommandWithKeyword.bind(this);
     this.computeGrid = this.computeGrid.bind(this);
     this.filterCategoriesByKeyword = this.filterCategoriesByKeyword.bind(this);
-    this.launchDelete = this.launchDelete.bind(this);
-    this.launchAddOrEdit = this.launchAddOrEdit.bind(this);
+    this.launchDeleteCategory = this.launchDeleteCategory.bind(this);
+    this.launchAddOrEditCategory = this.launchAddOrEditCategory.bind(this);
+    this.launchAddOrEditCommand = this.launchAddOrEditCommand.bind(this);
     this.deleteCategory = this.deleteCategory.bind(this);
     this.createOrEditCategory = this.createOrEditCategory.bind(this);
-    this.abortDeleteAction = this.abortDeleteAction.bind(this);
-    this.abortAddOrEditAction = this.abortAddOrEditAction.bind(this);
+    this.createOrEditCommand = this.createOrEditCommand.bind(this);
+    this.abortDeleteCategoryAction = this.abortDeleteCategoryAction.bind(this);
+    this.abortAddOrEditCategoryAction = this.abortAddOrEditCategoryAction.bind(this);
+    this.abortAddOrEditCommandAction = this.abortAddOrEditCommandAction.bind(this);
     this.togglePrivacyStatus = this.togglePrivacyStatus.bind(this);
   }
 
@@ -41,29 +46,49 @@ export class Categories extends React.Component {
     this.setState(state);
   }
 
-  abortDeleteAction() {
+  abortDeleteCategoryAction() {
     this.setState({ categoryToBeDeleted: null });
   }
 
-  abortAddOrEditAction(categoryBeingAddedOrEdited) {
-    this.setState({ categoryToBeDeleted: null, categoryToBeEdited: null });
+  abortAddOrEditCategoryAction(categoryBeingAddedOrEdited) {
     if (categoryBeingAddedOrEdited) {
       this.categoryBeingAddedOrEdited = categoryBeingAddedOrEdited;
     } else {
       this.categoryBeingAddedOrEdited = { _id: '' };
     }
+    this.setState({ categoryToBeEdited: null });
+  }
+
+  abortAddOrEditCommandAction(commandsBeingAddedOrEdited) {
+    if (commandsBeingAddedOrEdited) {
+      this.commandsBeingAddedOrEdited = commandsBeingAddedOrEdited;
+    } else {
+      this.commandsBeingAddedOrEdited = { commands: [{ _id: '' }], categoryId: '' };
+    }
+    this.setState({ commandsToBeEdited: null });
   }
 
   createOrEditCategory(category) {
     const { createOrEditCategory, user } = this.props;
-    createOrEditCategory(category, user.token).then(() => this.abortAddOrEditAction());
+    createOrEditCategory(category, user.token).then(() => this.abortAddOrEditCategoryAction());
   }
 
-  launchDelete(category) {
+  createOrEditCommand(commandsData) {
+    const { commands, categoryId } = commandsData;
+    const { editCategoryCommand, createCategoryCommands, user } = this.props;
+    if (commands.length === 1 && commands[0]._id) {
+      editCategoryCommand(commands[0], user.token).then(() => this.abortAddOrEditCommandAction());
+    } else {
+      createCategoryCommands(commands, categoryId, user.token)
+        .then(() => this.abortAddOrEditCommandAction());
+    }
+  }
+
+  launchDeleteCategory(category) {
     this.setState({ categoryToBeDeleted: { ...category } });
   }
 
-  launchAddOrEdit(categoryToBeEdited = {
+  launchAddOrEditCategory(categoryToBeEdited = {
     title: '',
     privacyStatus: false,
     commands: [{ script: '', description: '', keywords: '', key: Date.now() }],
@@ -75,10 +100,19 @@ export class Categories extends React.Component {
     }
   }
 
+  launchAddOrEditCommand(commandsToBeEdited) {
+    if (commandsToBeEdited.commands[0]._id === this.commandsBeingAddedOrEdited.commands[0]._id) {
+      this.setState({ commandsToBeEdited: this.commandsBeingAddedOrEdited });
+    } else {
+      this.setState({ commandsToBeEdited });
+    }
+  }
+
   deleteCategory() {
     const { deleteCategory, user } = this.props;
     const { categoryToBeDeleted } = this.state;
-    deleteCategory(categoryToBeDeleted._id, user.token).then(() => this.abortDeleteAction());
+    deleteCategory(categoryToBeDeleted._id, user.token)
+      .then(() => this.abortDeleteCategoryAction());
   }
 
   toggleCategoriesExpansion() {
@@ -125,6 +159,7 @@ export class Categories extends React.Component {
       keyword,
       categoryToBeDeleted,
       categoryToBeEdited,
+      commandsToBeEdited,
     } = this.state;
     const { user } = this.props;
     const [col1, col2] = this.computeGrid();
@@ -173,7 +208,7 @@ export class Categories extends React.Component {
                   <button
                     className="launch-add-category-button"
                     type="button"
-                    onClick={() => this.launchAddOrEdit()}
+                    onClick={() => this.launchAddOrEditCategory()}
                   >
                     Add Category
                   </button>
@@ -193,8 +228,9 @@ export class Categories extends React.Component {
                               expandAll={expandAll}
                               keyword={keyword}
                               user={user}
-                              launchDelete={this.launchDelete}
-                              launchEdit={this.launchAddOrEdit}
+                              launchDeleteCategory={this.launchDeleteCategory}
+                              launchEditCategory={this.launchAddOrEditCategory}
+                              launchAddOrEditCommand={this.launchAddOrEditCommand}
                               togglePrivacyStatus={this.togglePrivacyStatus}
                             />
                           </div>
@@ -211,8 +247,9 @@ export class Categories extends React.Component {
                               expandAll={expandAll}
                               keyword={keyword}
                               user={user}
-                              launchDelete={this.launchDelete}
-                              launchEdit={this.launchAddOrEdit}
+                              launchDeleteCategory={this.launchDeleteCategory}
+                              launchEditCategory={this.launchAddOrEditCategory}
+                              launchAddOrEditCommand={this.launchAddOrEditCommand}
                               togglePrivacyStatus={this.togglePrivacyStatus}
                             />
                           </div>
@@ -229,8 +266,9 @@ export class Categories extends React.Component {
                               expandAll={expandAll}
                               keyword={keyword}
                               user={user}
-                              launchDelete={this.launchDelete}
-                              launchEdit={this.launchAddOrEdit}
+                              launchDeleteCategory={this.launchDeleteCategory}
+                              launchEditCategory={this.launchAddOrEditCategory}
+                              launchAddOrEditCommand={this.launchAddOrEditCommand}
                               togglePrivacyStatus={this.togglePrivacyStatus}
                             />
                           </div>
@@ -245,9 +283,19 @@ export class Categories extends React.Component {
         {
           categoryToBeEdited ? (
             <CreateOrEditCategory
-              abort={this.abortAddOrEditAction}
+              abort={this.abortAddOrEditCategoryAction}
               category={categoryToBeEdited}
               createOrEditCategory={this.createOrEditCategory}
+            />
+          ) : ''
+        }
+        {
+          commandsToBeEdited ? (
+            <CreateOrEditCommand
+              commands={commandsToBeEdited.commands}
+              abort={this.abortAddOrEditCommandAction}
+              createOrEditCommand={this.createOrEditCommand}
+              categoryId={commandsToBeEdited.categoryId}
             />
           ) : ''
         }
@@ -255,7 +303,7 @@ export class Categories extends React.Component {
           categoryToBeDeleted ? (
             <DeleteCategory
               category={categoryToBeDeleted}
-              abort={this.abortDeleteAction}
+              abort={this.abortDeleteCategoryAction}
               deleteCategory={this.deleteCategory}
             />
           ) : ''
@@ -269,6 +317,8 @@ Categories.propTypes = {
   fetchCategories: PropTypes.func.isRequired,
   deleteCategory: PropTypes.func.isRequired,
   createOrEditCategory: PropTypes.func.isRequired,
+  createCategoryCommands: PropTypes.func.isRequired,
+  editCategoryCommand: PropTypes.func.isRequired,
   togglePrivacyStatus: PropTypes.func.isRequired,
   categories: PropTypes.arrayOf(PropTypes.any).isRequired,
   user: PropTypes.objectOf(PropTypes.any).isRequired,
@@ -285,6 +335,10 @@ export const mapDispatchToProps = dispatch => ({
   togglePrivacyStatus: (id, token) => dispatch(CategoriesActions.toggleCategoryPrivacy(id, token)),
   createOrEditCategory: (category, token) => dispatch(CategoriesActions
     .createOrEditCategory(category, token)),
+  editCategoryCommand: (command, token) => dispatch(CategoriesActions
+    .editCategoryCommand(command, token)),
+  createCategoryCommands: (commands, categoryId, token) => dispatch(CategoriesActions
+    .createCategoryCommands(commands, categoryId, token)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Categories);

@@ -29,14 +29,11 @@
           padding: 0 0.3em;
           background-color: white;
           text-align: right;
-          .fa-pen, .fa-trash, .privacy {
-            margin: auto 0;
+          .fa-pen, .fa-trash, .privacy, .fa-plus {
+            margin: auto 0 auto 0.7em;
             cursor: pointer;
             font-size: 0.7em;
             display: inline-block;
-          }
-          .fa-pen {
-            margin-right: 0.7em;
           }
         }
         .command-list {
@@ -44,10 +41,22 @@
           padding: 0;
           .command-list-item {
             background-color: #ffffe9;
-            padding: 0.5em;
             margin-top: 0.5em;
             margin-bottom: 0.5em;
+            .command-actions {
+              padding: 0 0.3em;
+              text-align: right;
+              font-size: 0.7em;
+              background-color: #e5e5d1;
+              span {
+                cursor: pointer;
+                &:hover {
+                  text-decoration: underline;
+                }
+              }
+            }
             .command-content {
+              padding: 0 0.5em 0.5em 0.5em;
               .command-description {
                 font-size: 0.85em;
               }
@@ -66,7 +75,7 @@
     }
   }
 }
-.delete-category, .add-or-edit-category {
+.delete-category, .add-or-edit-category, .create-or-edit-command {
   padding: 1em;
   background-color: #252a2e;
   .underline {
@@ -117,6 +126,32 @@
   .add-category-command-wrapper {
     text-align: center;
     .add-category-command-icon {
+      cursor: pointer;
+      font-size: 1em;
+    }
+  }
+}
+.create-or-edit-command {
+  .command-input-group {
+    padding-bottom: 0.5em;
+    border-top: 1px solid #7F7F7F;
+    border-bottom: 1px solid #7F7F7F;
+    margin-bottom: 0.5em;
+    input {
+      width: 50%;
+    }
+    .command-error-action-wrapper {
+      display: flex;
+      justify-content: space-between;
+      .remove-command-icon {
+        cursor: pointer;
+        font-size: 0.8em;
+      }
+    }
+  }
+  .add-command-wrapper {
+    text-align: center;
+    .add-command-icon {
       cursor: pointer;
       font-size: 1em;
     }

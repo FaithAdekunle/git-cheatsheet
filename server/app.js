@@ -1,5 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
+import cors from 'cors';
 import logger from 'morgan';
 import Routes from './routes';
 
@@ -10,6 +11,7 @@ class App {
 
   setup(models) {
     this.app.use(logger('dev'));
+    this.app.use(cors());
     this.app.use(bodyParser.json());
     this.app.use(bodyParser.urlencoded({ extended: false }));
     this.app.use('/api', Routes.routes(models));

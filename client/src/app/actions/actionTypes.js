@@ -10,4 +10,6 @@ module.exports = {
   authenticateSuccess: 'AUTHENTICATE_SUCCESS',
   mockSuccess: 'MOCK_SUCCESS',
   toggleCategoryPrivacySuccess: 'TOGGLE_CATEGORY_PRIVACY_SUCCESS',
+  editCategoryCommandSuccess: 'EDIT_CATEGORY_COMMAND_SUCCESS',
+  createCategoryCommandsSuccess: 'CREATE_CATEGORY_COMMAND_SUCCESS',
 };

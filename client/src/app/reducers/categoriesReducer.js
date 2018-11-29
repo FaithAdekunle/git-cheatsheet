@@ -1,7 +1,9 @@
 import { categories } from './initialState';
 import {
+  createCategoryCommandsSuccess,
   createCategorySuccess,
   deleteCategorySuccess,
+  editCategoryCommandSuccess,
   editCategorySuccess,
   fetchCategoriesSuccess,
   toggleCategoryPrivacySuccess,
@@ -25,7 +27,30 @@ const categoriesReducer = (state = categories, action) => {
     case editCategorySuccess:
       return state.map((category) => {
         if (category._id === action.category._id) {
-          return { ...category, ...action.category };
+          return { ...action.category, commands: category.commands };
+        }
+        return category;
+      });
+    case editCategoryCommandSuccess:
+      return state.map((category) => {
+        if (category._id === action.command.categoryId) {
+          return {
+            ...category,
+            commands: category.commands.map((command) => {
+              if (command._id === action.command._id) return action.command;
+              return command;
+            }),
+          };
+        }
+        return category;
+      });
+    case createCategoryCommandsSuccess:
+      return state.map((category) => {
+        if (category._id === action.commands[0].categoryId) {
+          return {
+            ...category,
+            commands: [...category.commands, ...action.commands],
+          };
         }
         return category;
       });

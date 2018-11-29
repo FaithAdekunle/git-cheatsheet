@@ -164,56 +164,6 @@ describe('commands', () => {
     expect(response.body.error).toBe('unauthorized');
   });
 
-  test('move command from wrong current category to existing category', async () => {
-    const categories = await Category.find({});
-    const commandId = categories[0].commands[0]._id;
-    const fromCategoryId = categories[1]._id;
-    const toCategoryId = categories[0]._id;
-    const response = await chai.request(host)
-      .put(`/api/commands/${commandId}/move`)
-      .send({ fromCategoryId, toCategoryId })
-      .query({ token: user1Token });
-    expect(response.body.success).toBe(false);
-  });
-
-  test('move command from non-existing category to existing category', async () => {
-    const categories = await Category.find({});
-    const commandId = categories[0].commands[0]._id;
-    const fromCategoryId = mongoose.Types.ObjectId();
-    const toCategoryId = categories[1]._id;
-    const response = await chai.request(host)
-      .put(`/api/commands/${commandId}/move`)
-      .send({ fromCategoryId, toCategoryId })
-      .query({ token: user1Token });
-    expect(response.body.success).toBe(false);
-    expect(response.body.error).toBe('invalid fromCategoryId or toCategoryId');
-  });
-
-  test('move command from existing category to existing category', async () => {
-    const categories = await Category.find({});
-    const commandId = categories[0].commands[0]._id;
-    const fromCategoryId = categories[0]._id;
-    const toCategoryId = categories[1]._id;
-    const response = await chai.request(host)
-      .put(`/api/commands/${commandId}/move`)
-      .send({ fromCategoryId, toCategoryId })
-      .query({ token: user1Token });
-    expect(response.body.success).toBe(true);
-  });
-
-  test('move command with invalid token', async () => {
-    const categories = await Category.find({});
-    const commandId = categories[0].commands[0]._id;
-    const fromCategoryId = categories[0]._id;
-    const toCategoryId = categories[1]._id;
-    const response = await chai.request(host)
-      .put(`/api/commands/${commandId}/move`)
-      .send({ fromCategoryId, toCategoryId })
-      .query({ token: user2Token });
-    expect(response.body.success).toBe(false);
-    expect(response.body.error).toBe('unauthorized');
-  });
-
   afterAll(async () => {
     await dropDatabase();
     await disconnect();
