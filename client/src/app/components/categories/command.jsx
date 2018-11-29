@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Command = ({ command, launchEditCommand, authorized }) => (
+const Command = ({ command, launchEditCommand, authorized, launchDeleteCommand }) => (
   <React.Fragment>
     {
       authorized ? (
@@ -16,7 +16,10 @@ const Command = ({ command, launchEditCommand, authorized }) => (
             Edit
           </span>
             {' | '}
-          <span className="delete-command-icon">
+          <span
+            className="delete-command-icon"
+            onClick={() => launchDeleteCommand(command)}
+          >
             Delete
           </span>
         </div>
@@ -37,6 +40,7 @@ Command.propTypes = {
   command: PropTypes.objectOf(PropTypes.any).isRequired,
   launchEditCommand: PropTypes.func.isRequired,
   authorized: PropTypes.bool.isRequired,
+  launchDeleteCommand: PropTypes.func.isRequired,
 };
 
 export default Command;

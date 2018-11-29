@@ -12,4 +12,5 @@ module.exports = {
   toggleCategoryPrivacySuccess: 'TOGGLE_CATEGORY_PRIVACY_SUCCESS',
   editCategoryCommandSuccess: 'EDIT_CATEGORY_COMMAND_SUCCESS',
   createCategoryCommandsSuccess: 'CREATE_CATEGORY_COMMAND_SUCCESS',
+  deleteCategoryCommandSuccess: 'DELETE_CATEGORY_COMMAND_SUCCESS',
 };

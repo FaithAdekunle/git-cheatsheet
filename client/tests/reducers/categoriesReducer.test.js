@@ -7,7 +7,7 @@ import {
   createCategorySuccess,
   editCategorySuccess,
   editCategoryCommandSuccess,
-  createCategoryCommandsSuccess,
+  createCategoryCommandsSuccess, deleteCategoryCommandSuccess,
 } from '../../src/app/actions/actionTypes';
 import categories from '../categories';
 
@@ -109,6 +109,24 @@ describe('categoriesReducer', () => {
     expect(categoriesReducer(
       [...categories],
       { type: createCategoryCommandsSuccess, commands: edit },
+    )).toEqual(expectedResult);
+  });
+
+  test('should remove existing command', () => {
+    const commandId = categories[0].commands[0]._id;
+    const categoryId = categories[0]._id;
+    const expectedResult = categories.map((category) => {
+      if (category._id === categoryId) {
+        return {
+          ...category,
+          commands: category.commands.filter(command => command._id !== commandId),
+        };
+      }
+      return category;
+    });
+    expect(categoriesReducer(
+      [...categories],
+      { type: deleteCategoryCommandSuccess, commandId, categoryId },
     )).toEqual(expectedResult);
   });
 });

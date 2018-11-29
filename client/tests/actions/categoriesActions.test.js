@@ -3,7 +3,7 @@ import thunk from 'redux-thunk';
 import moxios from 'moxios';
 import {
   beginAjaxCall, createCategoryCommandsSuccess,
-  createCategorySuccess,
+  createCategorySuccess, deleteCategoryCommandSuccess,
   deleteCategorySuccess, editCategoryCommandSuccess,
   editCategorySuccess,
   fetchCategoriesSuccess,
@@ -140,6 +140,24 @@ describe('categoriesActions', () => {
       { type: createCategoryCommandsSuccess, commands },
     ];
     await store.dispatch(CategoriesActions.createCategoryCommands({}));
+    expect(store.getActions()).toEqual(expectedActions);
+  });
+
+  test('should create deleteCategoryCommandSuccess action after deleting commands', async () => {
+    const commandId = 'test commandId';
+    const categoryId = 'test categoryId';
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({
+        status: 200,
+        response: {},
+      });
+    });
+    const expectedActions = [
+      { type: beginAjaxCall },
+      { type: deleteCategoryCommandSuccess, commandId, categoryId },
+    ];
+    await store.dispatch(CategoriesActions.deleteCategoryCommand(commandId, categoryId));
     expect(store.getActions()).toEqual(expectedActions);
   });
 });
