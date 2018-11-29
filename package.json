@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "server/index.js",
+  "engines" : {
+    "node" : "8.11.1",
+    "npm": "6.4.1"
+  },
   "nodemonConfig": {
     "ignore": [
       "node_modules/*",
