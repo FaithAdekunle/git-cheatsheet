@@ -53,7 +53,7 @@ class Category extends Component {
   }
 
   render() {
-    const { category, user, launchAddOrEditCommand } = this.props;
+    const { category, user, launchAddOrEditCommand, launchDeleteCommand } = this.props;
     const { expand } = this.state;
     const authorized = user.id === category.userId;
     return (
@@ -104,6 +104,7 @@ class Category extends Component {
                     user={user}
                     authorized={authorized}
                     launchEditCommand={launchAddOrEditCommand}
+                    launchDeleteCommand={launchDeleteCommand}
                   />
                 </li>
               ) : '')
@@ -124,6 +125,7 @@ Category.propTypes = {
   launchDeleteCategory: PropTypes.func.isRequired,
   launchEditCategory: PropTypes.func.isRequired,
   launchAddOrEditCommand: PropTypes.func.isRequired,
+  launchDeleteCommand: PropTypes.func.isRequired,
 };
 
 export default Category;

@@ -13,6 +13,7 @@ const categoriesProps = {
   createOrEditCategory: jest.fn(() => new Promise(resolve => resolve())),
   createCategoryCommands: jest.fn(() => new Promise(resolve => resolve())),
   editCategoryCommand: jest.fn(() => new Promise(resolve => resolve())),
+  deleteCategoryCommand: jest.fn(() => new Promise(resolve => resolve())),
 };
 
 const mockEvent = (value, name, checked) => ({
@@ -32,6 +33,7 @@ describe('<Categories />', () => {
     categoriesProps.createOrEditCategory.mockClear();
     categoriesProps.createCategoryCommands.mockClear();
     categoriesProps.editCategoryCommand.mockClear();
+    categoriesProps.deleteCategoryCommand.mockClear();
     dispatch.mockClear();
     wrapper = mount(<Categories {...categoriesProps} />);
   });
@@ -388,6 +390,32 @@ describe('<Categories />', () => {
     expect(categoriesProps.createCategoryCommands).toHaveBeenCalled();
   });
 
+  test('should call deleteCategoryCommand prop method', () => {
+    const user = { token: 'token', id: categories[0].userId };
+    const props = { ...categoriesProps, user };
+    wrapper = mount(<Categories {...props} />);
+    const launchDeleteCommandIcon = wrapper.find('.delete-command-icon');
+    launchDeleteCommandIcon.first().simulate('click');
+    wrapper.update();
+    const deleteCommandButton = wrapper.find('.delete-command-button');
+    deleteCommandButton.simulate('click');
+    expect(categoriesProps.deleteCategoryCommand).toHaveBeenCalled();
+  });
+
+  test('should call abort delete command action', () => {
+    const user = { token: 'token', id: categories[0].userId };
+    const props = { ...categoriesProps, user };
+    wrapper = mount(<Categories {...props} />);
+    const launchDeleteCommandIcon = wrapper.find('.delete-command-icon');
+    launchDeleteCommandIcon.first().simulate('click');
+    wrapper.update();
+    expect(wrapper.state('commandToBeDeleted')).toEqual(categories[0].commands[0]);
+    const abortDeleteCommandButton = wrapper.find('.abort-delete-command-button');
+    abortDeleteCommandButton.simulate('click');
+    wrapper.update();
+    expect(wrapper.state('commandToBeDeleted')).toBe(null);
+  });
+
   test('should filter categories based on search keywords', () => {
     let categoryComponent;
     categoryComponent = wrapper.find('.category-component');
@@ -423,6 +451,7 @@ describe('<Categories />', () => {
     actions.createOrEditCategory();
     actions.editCategoryCommand();
     actions.createCategoryCommands();
-    expect(dispatch).toHaveBeenCalledTimes(6);
+    actions.deleteCategoryCommand();
+    expect(dispatch).toHaveBeenCalledTimes(7);
   });
 });

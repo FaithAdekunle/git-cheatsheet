@@ -58,6 +58,10 @@ class AjaxHelpers {
       );
     return data;
   }
+
+  static async deleteCommand(commandId, token) {
+    await axios.delete(`${host}/api/commands/${commandId}?token=${token}`);
+  }
 }
 
 export default AjaxHelpers;

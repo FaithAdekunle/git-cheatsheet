@@ -1,6 +1,6 @@
 import {
   createCategoryCommandsSuccess,
-  createCategorySuccess,
+  createCategorySuccess, deleteCategoryCommandSuccess,
   deleteCategorySuccess,
   editCategoryCommandSuccess,
   editCategorySuccess,
@@ -40,6 +40,10 @@ class CategoriesActions {
 
   static createCategoryCommandsSuccess(commands) {
     return { type: createCategoryCommandsSuccess, commands };
+  }
+
+  static deleteCategoryCommandSuccess(commandId, categoryId) {
+    return { type: deleteCategoryCommandSuccess, commandId, categoryId };
   }
 
   static fetchCategories(token = '') {
@@ -92,6 +96,14 @@ class CategoriesActions {
       dispatch(AjaxCallsInProgressAction.beginAjaxCalls());
       const data = await AjaxHelpers.createCommands(commands, categoryId, token);
       dispatch(CategoriesActions.createCategoryCommandsSuccess(data.commands));
+    };
+  }
+
+  static deleteCategoryCommand(commandId, categoryId, token) {
+    return async (dispatch) => {
+      dispatch(AjaxCallsInProgressAction.beginAjaxCalls());
+      await AjaxHelpers.deleteCommand(commandId, token);
+      dispatch(CategoriesActions.deleteCategoryCommandSuccess(commandId, categoryId));
     };
   }
 }

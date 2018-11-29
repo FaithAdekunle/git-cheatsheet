@@ -7,6 +7,7 @@ import Category from './category';
 import DeleteCategory from './deleteCategory';
 import CreateOrEditCategory from './createOrEditCategory';
 import CreateOrEditCommand from './createOrEditCommand';
+import DeleteCommand from './deleteCommand';
 
 export class Categories extends React.Component {
   constructor(props) {
@@ -32,6 +33,9 @@ export class Categories extends React.Component {
     this.abortAddOrEditCategoryAction = this.abortAddOrEditCategoryAction.bind(this);
     this.abortAddOrEditCommandAction = this.abortAddOrEditCommandAction.bind(this);
     this.togglePrivacyStatus = this.togglePrivacyStatus.bind(this);
+    this.abortDeleteCommandAction = this.abortDeleteCommandAction.bind(this);
+    this.deleteCategoryCommand = this.deleteCategoryCommand.bind(this);
+    this.launchDeleteCommand = this.launchDeleteCommand.bind(this);
   }
 
   async componentDidMount() {
@@ -48,6 +52,10 @@ export class Categories extends React.Component {
 
   abortDeleteCategoryAction() {
     this.setState({ categoryToBeDeleted: null });
+  }
+
+  abortDeleteCommandAction() {
+    this.setState({ commandToBeDeleted: null });
   }
 
   abortAddOrEditCategoryAction(categoryBeingAddedOrEdited) {
@@ -88,6 +96,10 @@ export class Categories extends React.Component {
     this.setState({ categoryToBeDeleted: { ...category } });
   }
 
+  launchDeleteCommand(commandToBeDeleted) {
+    this.setState({ commandToBeDeleted });
+  }
+
   launchAddOrEditCategory(categoryToBeEdited = {
     title: '',
     privacyStatus: false,
@@ -113,6 +125,13 @@ export class Categories extends React.Component {
     const { categoryToBeDeleted } = this.state;
     deleteCategory(categoryToBeDeleted._id, user.token)
       .then(() => this.abortDeleteCategoryAction());
+  }
+
+  deleteCategoryCommand() {
+    const { deleteCategoryCommand, user } = this.props;
+    const { commandToBeDeleted } = this.state;
+    deleteCategoryCommand(commandToBeDeleted._id, commandToBeDeleted.categoryId, user.token)
+      .then(() => this.abortDeleteCommandAction());
   }
 
   toggleCategoriesExpansion() {
@@ -160,6 +179,7 @@ export class Categories extends React.Component {
       categoryToBeDeleted,
       categoryToBeEdited,
       commandsToBeEdited,
+      commandToBeDeleted,
     } = this.state;
     const { user } = this.props;
     const [col1, col2] = this.computeGrid();
@@ -231,6 +251,7 @@ export class Categories extends React.Component {
                               launchDeleteCategory={this.launchDeleteCategory}
                               launchEditCategory={this.launchAddOrEditCategory}
                               launchAddOrEditCommand={this.launchAddOrEditCommand}
+                              launchDeleteCommand={this.launchDeleteCommand}
                               togglePrivacyStatus={this.togglePrivacyStatus}
                             />
                           </div>
@@ -250,6 +271,7 @@ export class Categories extends React.Component {
                               launchDeleteCategory={this.launchDeleteCategory}
                               launchEditCategory={this.launchAddOrEditCategory}
                               launchAddOrEditCommand={this.launchAddOrEditCommand}
+                              launchDeleteCommand={this.launchDeleteCommand}
                               togglePrivacyStatus={this.togglePrivacyStatus}
                             />
                           </div>
@@ -269,6 +291,7 @@ export class Categories extends React.Component {
                               launchDeleteCategory={this.launchDeleteCategory}
                               launchEditCategory={this.launchAddOrEditCategory}
                               launchAddOrEditCommand={this.launchAddOrEditCommand}
+                              launchDeleteCommand={this.launchDeleteCommand}
                               togglePrivacyStatus={this.togglePrivacyStatus}
                             />
                           </div>
@@ -308,6 +331,15 @@ export class Categories extends React.Component {
             />
           ) : ''
         }
+        {
+          commandToBeDeleted ? (
+            <DeleteCommand
+              abort={this.abortDeleteCommandAction}
+              command={commandToBeDeleted}
+              deleteCommand={this.deleteCategoryCommand}
+            />
+          ) : ''
+        }
       </React.Fragment>
     );
   }
@@ -318,6 +350,7 @@ Categories.propTypes = {
   deleteCategory: PropTypes.func.isRequired,
   createOrEditCategory: PropTypes.func.isRequired,
   createCategoryCommands: PropTypes.func.isRequired,
+  deleteCategoryCommand: PropTypes.func.isRequired,
   editCategoryCommand: PropTypes.func.isRequired,
   togglePrivacyStatus: PropTypes.func.isRequired,
   categories: PropTypes.arrayOf(PropTypes.any).isRequired,
@@ -339,6 +372,8 @@ export const mapDispatchToProps = dispatch => ({
     .editCategoryCommand(command, token)),
   createCategoryCommands: (commands, categoryId, token) => dispatch(CategoriesActions
     .createCategoryCommands(commands, categoryId, token)),
+  deleteCategoryCommand: (commandId, categoryId, token) => dispatch(CategoriesActions
+    .deleteCategoryCommand(commandId, categoryId, token)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Categories);

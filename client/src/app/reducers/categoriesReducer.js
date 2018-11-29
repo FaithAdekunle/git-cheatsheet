@@ -1,7 +1,7 @@
 import { categories } from './initialState';
 import {
   createCategoryCommandsSuccess,
-  createCategorySuccess,
+  createCategorySuccess, deleteCategoryCommandSuccess,
   deleteCategorySuccess,
   editCategoryCommandSuccess,
   editCategorySuccess,
@@ -50,6 +50,16 @@ const categoriesReducer = (state = categories, action) => {
           return {
             ...category,
             commands: [...category.commands, ...action.commands],
+          };
+        }
+        return category;
+      });
+    case deleteCategoryCommandSuccess:
+      return state.map((category) => {
+        if (category._id === action.categoryId) {
+          return {
+            ...category,
+            commands: category.commands.filter(command => command._id !== action.commandId),
           };
         }
         return category;
