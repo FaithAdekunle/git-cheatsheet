@@ -11,6 +11,8 @@ const db = () => {
       return process.env.DB_PRODUCTION;
     case 'test':
       return process.env.DB_TEST;
+    case 'seed':
+      return process.env.DB_SEED;
     default:
       return process.env.DB_DEVELOPMENT;
   }

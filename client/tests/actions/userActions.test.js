@@ -5,9 +5,10 @@ import {
   beginAjaxCall,
   authenticateSuccess,
   mockSuccess,
-  expandSidebar,
+  expandSidebar, fetchCategoriesSuccess,
 } from '../../src/app/actions/actionTypes';
 import UserActions from '../../src/app/actions/userActions';
+import categories from '../categories';
 
 const mockStore = configureStore([thunk]);
 const store = mockStore();
@@ -96,6 +97,26 @@ describe('userActions', () => {
     ];
     try {
       await store.dispatch(UserActions.register(credentials));
+    } catch {
+      expect(store.getActions()).toEqual(expectedActions);
+    }
+  });
+
+  test('logout', async () => {
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({
+        status: 200,
+        response: { categories },
+      });
+    });
+    const expectedActions = [
+      { type: beginAjaxCall },
+      { type: fetchCategoriesSuccess, categories },
+      { type: authenticateSuccess, user: { token: '', id: '' } },
+    ];
+    try {
+      await store.dispatch(UserActions.logout());
     } catch {
       expect(store.getActions()).toEqual(expectedActions);
     }

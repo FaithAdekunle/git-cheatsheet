@@ -29,11 +29,18 @@ class UserActions {
       const user = await AjaxHelpers.register(credentials);
       if (user.success) {
         dispatch(CategoriesActions.fetchCategories(user.token));
-        dispatch(UserActions.authenticateSuccess({ token: user.token, id: user.id }));
+        await dispatch(UserActions.authenticateSuccess({ token: user.token, id: user.id }));
         return dispatch(expandOrCollapseSidebar(false));
       }
       dispatch({ type: mockSuccess });
       throw new Error(user.error);
+    };
+  }
+
+  static logout() {
+    return async (dispatch) => {
+      await dispatch(CategoriesActions.fetchCategories());
+      dispatch(UserActions.authenticateSuccess({ token: '', id: '' }));
     };
   }
 }
