@@ -7,6 +7,7 @@ module.exports = {
     'client/src/app/**/*.{js|jsx}',
     '!client/src/app/store/index.js',
     '!client/src/app/reducers/index.js',
+    '!client/src/app/helpers/host.js',
   ],
   setupTestFrameworkScriptFile: '<rootDir>/jestSetup.js',
 };

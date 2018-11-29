@@ -4,7 +4,10 @@ import {
   fetchCategoriesSuccess,
   toggleCategoryPrivacySuccess,
   deleteCategorySuccess,
-  createCategorySuccess, editCategorySuccess,
+  createCategorySuccess,
+  editCategorySuccess,
+  editCategoryCommandSuccess,
+  createCategoryCommandsSuccess,
 } from '../../src/app/actions/actionTypes';
 import categories from '../categories';
 
@@ -29,7 +32,7 @@ describe('categoriesReducer', () => {
     }));
   });
 
-  test('should add existing category', () => {
+  test('should add new category', () => {
     const category = { _id: 'newly created category' };
     expect(categoriesReducer(
       categories,
@@ -45,7 +48,7 @@ describe('categoriesReducer', () => {
     )).toEqual(categories.filter(category => category._id !== id));
   });
 
-  test('should edit new category', () => {
+  test('should edit existing category', () => {
     const edit = {
       _id: categories[0]._id,
       title: 'edited title',
@@ -61,5 +64,51 @@ describe('categoriesReducer', () => {
       }
       return category;
     }));
+  });
+
+  test('should edit existing command', () => {
+    const edit = {
+      _id: categories[0].commands[0]._id,
+      script: 'edited script',
+      userId: categories[0].userId,
+      categoryId: categories[0]._id,
+    };
+    const expectedResult = categories.map((category) => {
+      if (category._id === edit.categoryId) {
+        return {
+          ...category,
+          commands: category.commands.map((command) => {
+            if (command._id === edit._id) return edit;
+            return command;
+          }),
+        };
+      }
+      return category;
+    });
+    expect(categoriesReducer(
+      [...categories],
+      { type: editCategoryCommandSuccess, command: edit },
+    )).toEqual(expectedResult);
+  });
+
+  test('should add existing command', () => {
+    const edit = [{
+      script: 'edited script',
+      userId: categories[0].userId,
+      categoryId: categories[0]._id,
+    }];
+    const expectedResult = categories.map((category) => {
+      if (category._id === edit[0].categoryId) {
+        return {
+          ...category,
+          commands: [...category.commands, ...edit],
+        };
+      }
+      return category;
+    });
+    expect(categoriesReducer(
+      [...categories],
+      { type: createCategoryCommandsSuccess, commands: edit },
+    )).toEqual(expectedResult);
   });
 });

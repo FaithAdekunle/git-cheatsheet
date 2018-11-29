@@ -11,6 +11,8 @@ const categoriesProps = {
   togglePrivacyStatus: jest.fn(),
   deleteCategory: jest.fn(() => new Promise(resolve => resolve())),
   createOrEditCategory: jest.fn(() => new Promise(resolve => resolve())),
+  createCategoryCommands: jest.fn(() => new Promise(resolve => resolve())),
+  editCategoryCommand: jest.fn(() => new Promise(resolve => resolve())),
 };
 
 const mockEvent = (value, name, checked) => ({
@@ -28,6 +30,8 @@ describe('<Categories />', () => {
     categoriesProps.deleteCategory.mockClear();
     categoriesProps.togglePrivacyStatus.mockClear();
     categoriesProps.createOrEditCategory.mockClear();
+    categoriesProps.createCategoryCommands.mockClear();
+    categoriesProps.editCategoryCommand.mockClear();
     dispatch.mockClear();
     wrapper = mount(<Categories {...categoriesProps} />);
   });
@@ -293,6 +297,97 @@ describe('<Categories />', () => {
     expect(categoriesProps.createOrEditCategory).toHaveBeenCalledWith(category, user.token);
   });
 
+  test('should call editCategoryCommand prop method', () => {
+    const user = { token: 'token', id: categories[0].userId };
+    const props = { ...categoriesProps, user };
+    wrapper = mount(<Categories {...props} />);
+    const launchEditCommandButton = wrapper.find('.edit-command-icon');
+    launchEditCommandButton.first().simulate('click');
+    wrapper.update();
+    const editCommandForm = wrapper.find('.create-or-edit-command-form');
+    editCommandForm.simulate('submit');
+    expect(categoriesProps.editCategoryCommand).toHaveBeenCalled();
+  });
+
+  test('should maintain edit command form state', () => {
+    const user = { token: 'token', id: categories[0].userId };
+    const props = { ...categoriesProps, user };
+    wrapper = mount(<Categories {...props} />);
+    let launchEditCommandButton = wrapper.find('.edit-command-icon');
+    launchEditCommandButton.first().simulate('click');
+    wrapper.update();
+    let scriptField = wrapper.find('input[name="script"]');
+    scriptField.simulate('change', mockEvent('script changed', 'script'));
+    wrapper.update();
+    const abortEditCommandButton = wrapper.find('.abort-create-or-edit-command-button');
+    abortEditCommandButton.simulate('click');
+    wrapper.update();
+    launchEditCommandButton = wrapper.find('.edit-command-icon');
+    launchEditCommandButton.first().simulate('click');
+    wrapper.update();
+    scriptField = wrapper.find('input[name="script"]');
+    expect(scriptField.props().value).toBe('script changed');
+  });
+
+  test('should add and remove command input groups in add command modal', () => {
+    const user = { token: 'token', id: categories[0].userId };
+    const props = { ...categoriesProps, user };
+    wrapper = mount(<Categories {...props} />);
+    const launchAddCommandsButton = wrapper.find('.add-commands-icon');
+    launchAddCommandsButton.first().simulate('click');
+    wrapper.update();
+    let commandInputGroups = wrapper.find('.command-input-group');
+    expect(commandInputGroups.length).toBe(1);
+    const addCommandIcon = wrapper.find('.add-command-icon');
+    addCommandIcon.simulate('click');
+    wrapper.update();
+    commandInputGroups = wrapper.find('.command-input-group');
+    expect(commandInputGroups.length).toBe(2);
+    const removeCommandIcons = wrapper.find('.remove-command-icon');
+    removeCommandIcons.first().simulate('click');
+    wrapper.update();
+    commandInputGroups = wrapper.find('.command-input-group');
+    expect(commandInputGroups.length).toBe(1);
+  });
+
+  test('should display specific error messages', () => {
+    const user = { token: 'token', id: categories[0].userId };
+    const props = { ...categoriesProps, user };
+    wrapper = mount(<Categories {...props} />);
+    const launchAddCommandsButton = wrapper.find('.add-commands-icon');
+    launchAddCommandsButton.first().simulate('click');
+    wrapper.update();
+    const editCommandForm = wrapper.find('.create-or-edit-command-form');
+    editCommandForm.simulate('submit');
+    wrapper.update();
+    let error = wrapper.find('.error');
+    expect(error.text()).toBe('script and description fields cannot be empty');
+    const scriptField = wrapper.find('input[name="script"]');
+    scriptField.simulate('change', mockEvent('script changed', 'script'));
+    wrapper.update();
+    error = wrapper.find('.error');
+    expect(error.text()).toBe('description field cannot be empty');
+  });
+
+  test('should call createCategoryCommands prop method', () => {
+    const user = { token: 'token', id: categories[0].userId };
+    const props = { ...categoriesProps, user };
+    wrapper = mount(<Categories {...props} />);
+    const launchAddCommandsButton = wrapper.find('.add-commands-icon');
+    launchAddCommandsButton.first().simulate('click');
+    wrapper.update();
+    const scriptField = wrapper.find('input[name="script"]');
+    const descriptionField = wrapper.find('input[name="description"]');
+    const keywordsField = wrapper.find('input[name="keywords"]');
+    scriptField.simulate('change', mockEvent('script changed', 'script'));
+    descriptionField.simulate('change', mockEvent('description changed', 'description'));
+    keywordsField.simulate('change', mockEvent('key,words', 'keywords'));
+    wrapper.update();
+    const editCommandForm = wrapper.find('.create-or-edit-command-form');
+    editCommandForm.simulate('submit');
+    expect(categoriesProps.createCategoryCommands).toHaveBeenCalled();
+  });
+
   test('should filter categories based on search keywords', () => {
     let categoryComponent;
     categoryComponent = wrapper.find('.category-component');
@@ -326,6 +421,8 @@ describe('<Categories />', () => {
     actions.togglePrivacyStatus();
     actions.deleteCategory();
     actions.createOrEditCategory();
-    expect(dispatch).toHaveBeenCalledTimes(4);
+    actions.editCategoryCommand();
+    actions.createCategoryCommands();
+    expect(dispatch).toHaveBeenCalledTimes(6);
   });
 });

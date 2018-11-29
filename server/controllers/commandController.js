@@ -4,7 +4,7 @@ class CommandController {
     return async (req, res) => {
       const { commands, categoryId } = req.body;
       const savedCommands = await Command
-        .create(commands.map(command => ({ ...command, categoryId, userId: req.userId })));
+        .create(commands.map(command => ({ ...command, categoryId })));
       const category = await Category.findOne({ _id: categoryId });
       await Category
         .findOneAndUpdate(
@@ -25,7 +25,7 @@ class CommandController {
     return async (req, res) => {
       const { userId } = req;
       const command = await Command.findOne({ _id: req.params.id }).populate('categoryId');
-      if (userId == command.userId || userId == command.categoryId.userId) {
+      if (userId == command.categoryId.userId) {
         await Command.findOneAndDelete({ _id: req.params.id });
         return res.json({ success: true });
       }
@@ -40,7 +40,7 @@ class CommandController {
       const { userId } = req;
       const { command } = req.body;
       const update = await Command.findOne({ _id: req.params.id }).populate('categoryId');
-      if (userId == update.userId || userId == update.categoryId.userId) {
+      if (userId == update.categoryId.userId) {
         await Command.findOneAndUpdate({ _id: id }, command);
         const updatedCommand = await Command.findOne({ _id: id });
         return res.json({ success: true, command: updatedCommand });
@@ -63,44 +63,11 @@ class CommandController {
     };
   }
 
-  static moveCommand(models) {
-    const { Category, Command } = models;
-    return async (req, res) => {
-      const { userId } = req;
-      const { id } = req.params;
-      const { fromCategoryId, toCategoryId } = req.body;
-      const command = await Command.findOne({ _id: id }).populate('categoryId');
-      if (userId == command._id || userId == command.categoryId.userId) {
-        const fromCategory = await Category.findOne({ _id: fromCategoryId });
-        const toCategory = await Category.findOne({ _id: toCategoryId });
-        if (fromCategory && toCategory) {
-          if (fromCategory.commands.indexOf(id) === -1) {
-            return res.status(404)
-              .json({
-                success: false,
-                error: `command '${command.script}' does not belong in category '${fromCategory.title}'`,
-              });
-          }
-          const fromCommands = fromCategory.commands.filter(commandId => commandId != id);
-          const toCommands = [...toCategory.commands, id];
-          await Category.findOneAndUpdate({ _id: fromCategoryId }, { commands: fromCommands });
-          await Category.findOneAndUpdate({ _id: toCategoryId }, { commands: toCommands });
-          await Command.findOneAndUpdate({ _id: id }, { categoryId: toCategoryId });
-          return res.json({ success: true });
-        }
-        return res.status(404)
-          .json({ success: false, error: 'invalid fromCategoryId or toCategoryId' });
-      }
-      return res.status(401).json({ success: false, error: 'unauthorized' });
-    };
-  }
-
   static controllers(models) {
     return {
       saveCommands: CommandController.saveCommands(models),
       deleteCommand: CommandController.deleteCommand(models),
       updateCommand: CommandController.updateCommand(models),
-      moveCommand: CommandController.moveCommand(models),
       confirmCommand: CommandController.confirmCommand(models),
     };
   }

@@ -10,8 +10,8 @@ class Category extends Component {
     this.toggleExpansion = this.toggleExpansion.bind(this);
     this.hasKeyWord = this.hasKeyWord.bind(this);
     this.togglePrivacyStatus = this.togglePrivacyStatus.bind(this);
-    this.launchDelete = this.launchDelete.bind(this);
-    this.launchEdit = this.launchEdit.bind(this);
+    this.launchDeleteCategory = this.launchDeleteCategory.bind(this);
+    this.launchEditCategory = this.launchEditCategory.bind(this);
   }
 
   componentDidMount() {
@@ -24,14 +24,14 @@ class Category extends Component {
     if (expandAll !== prevProps.expandAll) this.setState({ expand: expandAll });
   }
 
-  launchDelete() {
-    const { launchDelete, category } = this.props;
-    launchDelete(category);
+  launchDeleteCategory() {
+    const { launchDeleteCategory, category } = this.props;
+    launchDeleteCategory(category);
   }
 
-  launchEdit() {
-    const { launchEdit, category } = this.props;
-    launchEdit(category);
+  launchEditCategory() {
+    const { launchEditCategory, category } = this.props;
+    launchEditCategory(category);
   }
 
   toggleExpansion() {
@@ -53,8 +53,9 @@ class Category extends Component {
   }
 
   render() {
-    const { category, user } = this.props;
+    const { category, user, launchAddOrEditCommand } = this.props;
     const { expand } = this.state;
+    const authorized = user.id === category.userId;
     return (
       <React.Fragment>
         <div className="category-header" onClick={this.toggleExpansion}>
@@ -64,16 +65,30 @@ class Category extends Component {
         </div>
         <div className={`category-body${expand ? ' expand' : ''}`}>
           {
-            user.id === category.userId ? (
+            authorized ? (
               <div className="category-actions">
                 <span className="privacy" onClick={this.togglePrivacyStatus}>
                   {`set to ${category.privacyStatus ? 'public' : 'private'}`}
                 </span>
                 <span>
-                  <span className="edit-category-icon" onClick={this.launchEdit}>
+                  <span
+                    className="add-commands-icon"
+                    onClick={() => launchAddOrEditCommand({
+                      commands: [{
+                        script: '',
+                        description: '',
+                        keywords: [],
+                        key: Date.now(),
+                      }],
+                      categoryId: category._id,
+                    })}
+                  >
+                    <FontAwesomeIcon icon="plus" />
+                  </span>
+                  <span className="edit-category-icon" onClick={this.launchEditCategory}>
                     <FontAwesomeIcon icon="pen" />
                   </span>
-                  <span className="delete-category-icon" onClick={this.launchDelete}>
+                  <span className="delete-category-icon" onClick={this.launchDeleteCategory}>
                     <FontAwesomeIcon icon="trash" />
                   </span>
                 </span>
@@ -84,7 +99,12 @@ class Category extends Component {
             {
               category.commands.map(command => this.hasKeyWord(command) ? (
                 <li className="command-list-item" key={command._id}>
-                  <Command command={command} />
+                  <Command
+                    command={command}
+                    user={user}
+                    authorized={authorized}
+                    launchEditCommand={launchAddOrEditCommand}
+                  />
                 </li>
               ) : '')
             }
@@ -101,8 +121,9 @@ Category.propTypes = {
   keyword: PropTypes.string.isRequired,
   user: PropTypes.objectOf(PropTypes.any).isRequired,
   togglePrivacyStatus: PropTypes.func.isRequired,
-  launchDelete: PropTypes.func.isRequired,
-  launchEdit: PropTypes.func.isRequired,
+  launchDeleteCategory: PropTypes.func.isRequired,
+  launchEditCategory: PropTypes.func.isRequired,
+  launchAddOrEditCommand: PropTypes.func.isRequired,
 };
 
 export default Category;

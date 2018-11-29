@@ -16,7 +16,6 @@ export const seedCommands = async (
     .create(nextCategory.commands.map(command => ({
       ...command,
       categoryId: seededCategory._id,
-      userId: seededCategory.userId,
     })));
   await Category.findOneAndUpdate(
     { _id: seededCategory._id },
