@@ -29,7 +29,8 @@ export const seedCommands = async (
   }
 };
 
-export const seed = async () => {
+export const seed = async (env) => {
+  if (env) process.env.NODE_ENV = env;
   const models = await connect();
   await dropDatabase();
   const password = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10);

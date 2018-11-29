@@ -1,3 +1,3 @@
 import seed from './seed';
 
-seed();
+seed('seed');

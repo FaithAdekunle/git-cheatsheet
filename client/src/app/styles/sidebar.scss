@@ -1,18 +1,25 @@
 .sidebar {
   padding: 1em;
   position: fixed;
-  min-height: 100vh;
+  height: 100vh;
+  overflow-y: scroll;
   min-width: 20%;
-  z-index: 1;
+  max-width: 70%;
+  @media screen and (min-width: 600px) {
+    max-width: 20%;
+  }
+  z-index: 10;
   background-color: #21252b;
   box-shadow: rgba(0, 0, 0, 0.15) -2px 2px 4px;
   transition: -webkit-transform 0.3s ease-out 0s;
   will-change: transform;
   transform: translateX(-100%);
   display: flex !important;
-  height: 100%;
   flex-direction: column;
   justify-content: space-between;
+  .logout-container {
+    margin-bottom: 17vh;
+  }
   .login-or-register {
     @import 'loginOrRegister';
   }
@@ -22,6 +29,7 @@
   top: 3%;
   left: 1%;
   cursor: pointer;
+  z-index: 9;
 }
 .sidebar-expand {
   transform: translateX(0%);

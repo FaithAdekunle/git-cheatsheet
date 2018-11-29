@@ -10,11 +10,13 @@ const sidebarProps = {
   expand: false,
   user: { token: '', id: '' },
   expandSidebar: jest.fn(),
+  logout: jest.fn(),
 };
 
 describe('<Sidebar />', () => {
   beforeEach(() => {
     sidebarProps.expandSidebar.mockClear();
+    sidebarProps.logout.mockClear();
     wrapper = shallow(<Sidebar {...sidebarProps} />);
   });
 
@@ -38,6 +40,14 @@ describe('<Sidebar />', () => {
     expect(toJson(wrapper)).toMatchSnapshot();
   });
 
+  test('should call logout prop method', () => {
+    const props = { ...sidebarProps, user: { token: 'token', id: 'id' } };
+    wrapper = shallow(<Sidebar {...props} />);
+    const logoutButton = wrapper.find('.logout');
+    logoutButton.simulate('click');
+    expect(sidebarProps.logout).toHaveBeenCalled();
+  });
+
   test('should call expandSidebar prop method', () => {
     const expandSidebar = wrapper.find('.expand-sidebar');
     expandSidebar.simulate('click');
@@ -53,6 +63,7 @@ describe('<Sidebar />', () => {
     const dispatch = jest.fn();
     const actions = mapDispatchToProps(dispatch);
     actions.expandSidebar();
-    expect(dispatch).toHaveBeenCalledTimes(1);
+    actions.logout();
+    expect(dispatch).toHaveBeenCalledTimes(2);
   });
 });

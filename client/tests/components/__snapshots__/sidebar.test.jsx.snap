@@ -11,6 +11,43 @@ exports[`<Sidebar /> should match snapshot with user details 1`] = `
   <div
     className="sidebar"
   >
+    <div>
+      <div
+        className="logout-container text-center"
+      >
+        <button
+          className="logout"
+          onClick={[MockFunction]}
+        >
+          logout
+        </button>
+      </div>
+      <hr />
+      <p
+        className="text-center"
+      >
+        "Create/Edit/Delete your own cheat categories or mark them as public/private"
+      </p>
+      <hr />
+      <p
+        className="text-center"
+      >
+        "Edit/Delete a command or add multiple commands to any of your cheat categories"
+      </p>
+      <hr />
+      <p
+        className="text-center"
+      >
+        "Click on a cheat command to copy it to your clipboard"
+      </p>
+      <hr />
+      <p
+        className="text-center"
+      >
+        "Find keyword related commands using the keyword search bar"
+      </p>
+      <hr />
+    </div>
     <h6
       className="text-center"
     >
@@ -31,10 +68,36 @@ exports[`<Sidebar /> should match snapshot without user details 1`] = `
   <div
     className="sidebar"
   >
-    <div
-      className="login-or-register"
-    >
-      <Connect(LoginOrRegister) />
+    <div>
+      <div
+        className="login-or-register"
+      >
+        <Connect(LoginOrRegister) />
+      </div>
+      <hr />
+      <p
+        className="text-center"
+      >
+        "Create/Edit/Delete your own cheat categories or mark them as public/private"
+      </p>
+      <hr />
+      <p
+        className="text-center"
+      >
+        "Edit/Delete a command or add multiple commands to any of your cheat categories"
+      </p>
+      <hr />
+      <p
+        className="text-center"
+      >
+        "Click on a cheat command to copy it to your clipboard"
+      </p>
+      <hr />
+      <p
+        className="text-center"
+      >
+        "Find keyword related commands using the keyword search bar"
+      </p>
       <hr />
     </div>
     <h6
