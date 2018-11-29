@@ -23,7 +23,7 @@
     "start:client": "webpack-dev-server --config webpack.dev.js & babel-node server",
     "start:dev": "webpack-dev-server --config webpack.dev.js & nodemon --exec babel-node server",
     "start": "npm run build && node build/server",
-    "seed": "babel-node server/seeds",
+    "seed": "NODE_ENV=seed babel-node server/seeds",
     "heroku-prebuild": "npm config set registry http://registry.npmjs.org"
   },
   "keywords": [],
