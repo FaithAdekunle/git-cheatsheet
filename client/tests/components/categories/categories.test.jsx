@@ -416,6 +416,14 @@ describe('<Categories />', () => {
     expect(wrapper.state('commandToBeDeleted')).toBe(null);
   });
 
+  test('should copy command to clipboard', () => {
+    Object.defineProperty(global.document, 'execCommand', { value: jest.fn() });
+    const commandScripts = wrapper.find('.command-script');
+    commandScripts.first().simulate('click');
+    // expect(wrapper.state('copiedCommandId')).toBe(categories[0].commands[0]._id);
+    expect(document.execCommand).toHaveBeenCalled();
+  });
+
   test('should filter categories based on search keywords', () => {
     let categoryComponent;
     categoryComponent = wrapper.find('.category-component');
