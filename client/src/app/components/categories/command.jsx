@@ -1,7 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Command = ({ command, launchEditCommand, authorized, launchDeleteCommand }) => (
+const Command = ({
+  command,
+  launchEditCommand,
+  authorized,
+  launchDeleteCommand,
+  onCopy,
+  copiedCommandId,
+}) => (
   <React.Fragment>
     {
       authorized ? (
@@ -29,8 +36,15 @@ const Command = ({ command, launchEditCommand, authorized, launchDeleteCommand }
       <div className="command-description">
         { command.description }
       </div>
-      <code className="command-script">
+      <code
+        className="command-script"
+        onClick={() => document.execCommand('copy')}
+        onCopy={event => onCopy(event, command.script, command._id)}
+      >
         { command.script }
+        {
+          copiedCommandId === command._id ? <span className="copied">Copied!</span> : ''
+        }
       </code>
     </div>
   </React.Fragment>
@@ -41,6 +55,8 @@ Command.propTypes = {
   launchEditCommand: PropTypes.func.isRequired,
   authorized: PropTypes.bool.isRequired,
   launchDeleteCommand: PropTypes.func.isRequired,
+  onCopy: PropTypes.func.isRequired,
+  copiedCommandId: PropTypes.string.isRequired,
 };
 
 export default Command;

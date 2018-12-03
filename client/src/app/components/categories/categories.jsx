@@ -15,6 +15,7 @@ export class Categories extends React.Component {
     this.state = {
       expandAll: false,
       keyword: '',
+      copiedCommandId: '',
     };
     this.categoryBeingAddedOrEdited = { _id: '' };
     this.commandsBeingAddedOrEdited = { commands: [{ _id: '' }], categoryId: '' };
@@ -36,11 +37,20 @@ export class Categories extends React.Component {
     this.abortDeleteCommandAction = this.abortDeleteCommandAction.bind(this);
     this.deleteCategoryCommand = this.deleteCategoryCommand.bind(this);
     this.launchDeleteCommand = this.launchDeleteCommand.bind(this);
+    this.onCopyCommand = this.onCopyCommand.bind(this);
   }
 
   async componentDidMount() {
     const { fetchCategories } = this.props;
     await fetchCategories();
+  }
+
+  onCopyCommand(event, script, id) {
+    event.preventDefault();
+    window.clearTimeout(this.copyTimeout);
+    event.clipboardData.setData('text/plain', script);
+    this.setState({ copiedCommandId: id });
+    this.copyTimeout = window.setTimeout(() => this.setState({ copiedCommandId: '' }), 2000);
   }
 
   onKeywordChange(event) {
@@ -180,6 +190,7 @@ export class Categories extends React.Component {
       categoryToBeEdited,
       commandsToBeEdited,
       commandToBeDeleted,
+      copiedCommandId,
     } = this.state;
     const { user } = this.props;
     const [col1, col2] = this.computeGrid();
@@ -248,6 +259,8 @@ export class Categories extends React.Component {
                               expandAll={expandAll}
                               keyword={keyword}
                               user={user}
+                              copiedCommandId={copiedCommandId}
+                              onCopyCommand={this.onCopyCommand}
                               launchDeleteCategory={this.launchDeleteCategory}
                               launchEditCategory={this.launchAddOrEditCategory}
                               launchAddOrEditCommand={this.launchAddOrEditCommand}
@@ -268,6 +281,8 @@ export class Categories extends React.Component {
                               expandAll={expandAll}
                               keyword={keyword}
                               user={user}
+                              copiedCommandId={copiedCommandId}
+                              onCopyCommand={this.onCopyCommand}
                               launchDeleteCategory={this.launchDeleteCategory}
                               launchEditCategory={this.launchAddOrEditCategory}
                               launchAddOrEditCommand={this.launchAddOrEditCommand}
@@ -288,6 +303,8 @@ export class Categories extends React.Component {
                               expandAll={expandAll}
                               keyword={keyword}
                               user={user}
+                              copiedCommandId={copiedCommandId}
+                              onCopyCommand={this.onCopyCommand}
                               launchDeleteCategory={this.launchDeleteCategory}
                               launchEditCategory={this.launchAddOrEditCategory}
                               launchAddOrEditCommand={this.launchAddOrEditCommand}

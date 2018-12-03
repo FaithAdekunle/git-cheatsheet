@@ -53,7 +53,14 @@ class Category extends Component {
   }
 
   render() {
-    const { category, user, launchAddOrEditCommand, launchDeleteCommand } = this.props;
+    const {
+      category,
+      user,
+      launchAddOrEditCommand,
+      launchDeleteCommand,
+      onCopyCommand,
+      copiedCommandId,
+    } = this.props;
     const { expand } = this.state;
     const authorized = user.id === category.userId;
     return (
@@ -105,6 +112,8 @@ class Category extends Component {
                     authorized={authorized}
                     launchEditCommand={launchAddOrEditCommand}
                     launchDeleteCommand={launchDeleteCommand}
+                    onCopy={onCopyCommand}
+                    copiedCommandId={copiedCommandId}
                   />
                 </li>
               ) : '')
@@ -120,12 +129,14 @@ Category.propTypes = {
   category: PropTypes.objectOf(PropTypes.any).isRequired,
   expandAll: PropTypes.bool.isRequired,
   keyword: PropTypes.string.isRequired,
+  copiedCommandId: PropTypes.string.isRequired,
   user: PropTypes.objectOf(PropTypes.any).isRequired,
   togglePrivacyStatus: PropTypes.func.isRequired,
   launchDeleteCategory: PropTypes.func.isRequired,
   launchEditCategory: PropTypes.func.isRequired,
   launchAddOrEditCommand: PropTypes.func.isRequired,
   launchDeleteCommand: PropTypes.func.isRequired,
+  onCopyCommand: PropTypes.func.isRequired,
 };
 
 export default Category;

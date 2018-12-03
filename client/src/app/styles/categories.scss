@@ -63,6 +63,15 @@
               .command-script {
                 font-size: 0.7em;
                 cursor: pointer;
+                position: relative;
+                .copied {
+                  color: #2a252e;
+                  position: absolute;
+                  display: block;
+                  width: 15em;
+                  top: -1em;
+                  left: 80%;
+                }
               }
             }
           }
