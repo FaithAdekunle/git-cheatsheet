@@ -46,8 +46,10 @@ class Category extends Component {
   hasKeyWord(command) {
     const { keyword } = this.props;
     if (keyword.trim()) {
-      return !!command.keywords
-        .find(word => word.toLowerCase().includes(keyword.trim().toLowerCase()));
+      return (!!command.keywords
+        .find(word => word.toLowerCase().includes(keyword.trim().toLowerCase()))
+          || command.description.toLowerCase().includes(keyword.trim().toLowerCase())
+          || command.script.toLowerCase().includes(keyword.trim().toLowerCase()));
     }
     return true;
   }
