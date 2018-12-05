@@ -14,16 +14,16 @@ export class Categories extends React.Component {
     super(props);
     this.state = {
       expandAll: false,
-      keyword: '',
+      searchKeyword: '',
       copiedCommandId: '',
     };
     this.categoryBeingAddedOrEdited = { _id: '' };
     this.commandsBeingAddedOrEdited = { commands: [{ _id: '' }], categoryId: '' };
     this.toggleCategoriesExpansion = this.toggleCategoriesExpansion.bind(this);
     this.onKeywordChange = this.onKeywordChange.bind(this);
-    this.hasCommandWithKeyword = this.hasCommandWithKeyword.bind(this);
+    this.hasCommandWithSearch = this.hasCommandWithSearch.bind(this);
     this.computeGrid = this.computeGrid.bind(this);
-    this.filterCategoriesByKeyword = this.filterCategoriesByKeyword.bind(this);
+    this.filterCategoriesBySearch = this.filterCategoriesBySearch.bind(this);
     this.launchDeleteCategory = this.launchDeleteCategory.bind(this);
     this.launchAddOrEditCategory = this.launchAddOrEditCategory.bind(this);
     this.launchAddOrEditCommand = this.launchAddOrEditCommand.bind(this);
@@ -55,7 +55,7 @@ export class Categories extends React.Component {
 
   onKeywordChange(event) {
     const { target } = event;
-    const state = { keyword: target.value };
+    const state = { searchKeyword: target.value };
     if (target.value.trim()) state.expandAll = true;
     this.setState(state);
   }
@@ -153,23 +153,25 @@ export class Categories extends React.Component {
     togglePrivacyStatus(id, user.token);
   }
 
-  hasCommandWithKeyword(category) {
-    const { keyword } = this.state;
-    if (keyword.trim()) {
+  hasCommandWithSearch(category) {
+    const { searchKeyword } = this.state;
+    if (searchKeyword.trim()) {
       return !!category.commands
-        .find(command => !!command.keywords
-          .find(word => word.toLowerCase().includes(keyword.trim().toLowerCase())));
+        .find(command => (!!command.keywords
+          .find(word => word.toLowerCase().includes(searchKeyword.trim().toLowerCase()))
+          || command.description.toLowerCase().includes(searchKeyword.trim().toLowerCase())
+          || command.script.toLowerCase().includes(searchKeyword.trim().toLowerCase())));
     }
     return true;
   }
 
-  filterCategoriesByKeyword() {
+  filterCategoriesBySearch() {
     const { categories } = this.props;
-    return categories.filter(category => this.hasCommandWithKeyword(category));
+    return categories.filter(category => this.hasCommandWithSearch(category));
   }
 
   computeGrid() {
-    const categories = this.filterCategoriesByKeyword();
+    const categories = this.filterCategoriesBySearch();
     let remainder = categories.length % 3;
     const factor = Math.floor((categories.length - remainder) / 3);
     return [...Array(3)].map(() => {
@@ -182,10 +184,10 @@ export class Categories extends React.Component {
   }
 
   render() {
-    const categories = this.filterCategoriesByKeyword();
+    const categories = this.filterCategoriesBySearch();
     const {
       expandAll,
-      keyword,
+      searchKeyword,
       categoryToBeDeleted,
       categoryToBeEdited,
       commandsToBeEdited,
@@ -209,7 +211,7 @@ export class Categories extends React.Component {
                     </div>
                     <input
                       type="text"
-                      value={keyword}
+                      value={searchKeyword}
                       onChange={this.onKeywordChange}
                       className="form-control command-keyword-search-field"
                       placeholder="enter command keyword"
@@ -257,7 +259,7 @@ export class Categories extends React.Component {
                             <Category
                               category={category}
                               expandAll={expandAll}
-                              keyword={keyword}
+                              keyword={searchKeyword}
                               user={user}
                               copiedCommandId={copiedCommandId}
                               onCopyCommand={this.onCopyCommand}
@@ -279,7 +281,7 @@ export class Categories extends React.Component {
                             <Category
                               category={category}
                               expandAll={expandAll}
-                              keyword={keyword}
+                              keyword={searchKeyword}
                               user={user}
                               copiedCommandId={copiedCommandId}
                               onCopyCommand={this.onCopyCommand}
@@ -301,7 +303,7 @@ export class Categories extends React.Component {
                             <Category
                               category={category}
                               expandAll={expandAll}
-                              keyword={keyword}
+                              keyword={searchKeyword}
                               user={user}
                               copiedCommandId={copiedCommandId}
                               onCopyCommand={this.onCopyCommand}
